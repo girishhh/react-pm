@@ -57,9 +57,7 @@ export function removeResponseInterceptors(id: number): void {
   axios.interceptors.response.eject(id);
 }
 
-setBaseUrl(
-  `${process.env.GATSBY_DYNAMIC_API_URL}${process.env.GATSBY_DYNAMIC_API_VERSION}`
-);
+setBaseUrl(`${process.env.BASE_URL}`);
 
 addRequestInterceptors(
   // Attach JWT token to header and add user query param to all outgoing requests

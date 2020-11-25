@@ -5,7 +5,9 @@ import AdminDashboard from "./components/admins/Dashboard";
 import Login from "./components/auth/Login";
 import NotFound from "./components/common/NotFound";
 import Dashboard from "./components/Dashboard";
-import ProtectedRoute from "./components/hoc/PrivateRoute";
+import AuthRoute from "./components/hoc/AuthRoutes";
+import ProtectedRoute from "./components/hoc/ProtectedRoute";
+import "./App.scss";
 
 class AppComponent extends React.Component {
   render() {
@@ -14,7 +16,7 @@ class AppComponent extends React.Component {
         <>
           <Switch>
             <ProtectedRoute exact path="/admins" component={AdminDashboard} />
-            <Route exact path="/login" component={Login} />
+            <AuthRoute exact path="/login" component={Login} />
             <ProtectedRoute exact path="/dashboard" component={Dashboard} />
             <Route path="*" component={NotFound} />
           </Switch>

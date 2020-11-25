@@ -1,4 +1,4 @@
 export enum AuthConstants {
-  LOGIN_API = "/auth/login",
+  LOGIN_API = "/users/sign-in",
   USER_TOKEN = "digitalUserToken",
 }

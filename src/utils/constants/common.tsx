@@ -8,4 +8,10 @@ enum HTTP_METHODS {
   HEAD = "HEAD",
 }
 
-export { ALLOWED_SUB_DOMAINS, HTTP_METHODS };
+enum API_STATE {
+  LOADING = "loading",
+  ERROR = "error",
+  DONE = "done",
+}
+
+export { ALLOWED_SUB_DOMAINS, HTTP_METHODS, API_STATE };
