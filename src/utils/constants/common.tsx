@@ -1,4 +1,4 @@
-const ALLOWED_SUB_DOMAINS = ["ayanagar", "ku"];
+const ALLOWED_SUB_DOMAINS = ["ayanagar", "ku", "admin"];
 enum HTTP_METHODS {
   GET = "GET",
   POST = "POST",

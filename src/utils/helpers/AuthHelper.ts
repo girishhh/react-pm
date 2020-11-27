@@ -5,6 +5,7 @@ import axios from "axios";
 import { AuthConstants } from "../constants/AuthConstants";
 import jwtDecode from "jwt-decode";
 import { UserInterface } from "../../interfaces/UserInterface";
+import { parseDomain } from "parse-domain";
 
 export const isLoggedIn = (): boolean => {
   return !!BrowserHelper.getLocalStorageItem(AuthConstants.USER_TOKEN);
@@ -57,7 +58,7 @@ export function removeResponseInterceptors(id: number): void {
   axios.interceptors.response.eject(id);
 }
 
-setBaseUrl(`${process.env.BASE_URL}`);
+setBaseUrl(`${process.env.REACT_APP_BASE_URL}`);
 
 addRequestInterceptors(
   // Attach JWT token to header and add user query param to all outgoing requests
@@ -80,6 +81,9 @@ addRequestInterceptors(
         Authorization: `Bearer ${BrowserHelper.getLocalStorageItem(
           AuthConstants.USER_TOKEN
         )}`,
+        subdomain: `${
+          (parseDomain(window.location.host) as any).subDomains[0]
+        }`,
       },
       params: {
         ...config.params,

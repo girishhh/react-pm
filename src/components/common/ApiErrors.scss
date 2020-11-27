@@ -1,0 +1,10 @@
+@import "colors";
+
+.api-errors {
+  ul {
+    padding: 15px;
+    li {
+      color: $red;
+    }
+  }
+}

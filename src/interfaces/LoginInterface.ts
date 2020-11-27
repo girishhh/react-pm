@@ -1,7 +1,7 @@
 import { Session } from "./CommonInterface";
 import { DefaultResponse } from "./StoreInterface";
 
-export interface LoginState {
+export interface LoginStoreState {
   login: DefaultResponse;
 }
 

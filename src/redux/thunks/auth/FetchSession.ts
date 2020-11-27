@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { LoginAction, LoginPayload } from "../../../interfaces/LoginInterface";
 import AuthService from "../../../services/api/AuthService";
 
-export function login(formData: LoginPayload) {
+export function fetchSession(formData: LoginPayload) {
   return async function loginThunk(dispatch: Dispatch<LoginAction>) {
     try {
       dispatch({ type: "login/loading" });

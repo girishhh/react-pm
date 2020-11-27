@@ -13,7 +13,7 @@ interface ActionType {
 }
 
 interface Session {
-  access_token: string;
+  accessToken: string;
   expires_in: number;
   refresh_token: string;
   refresh_expires_in: number;

@@ -1,4 +1,5 @@
 import { ActionType } from "../../../interfaces/CommonInterface";
+import { LoginStoreState } from "../../../interfaces/LoginInterface";
 import { API_STATE } from "../../../utils/constants/common";
 
 const initialState = {
@@ -6,10 +7,14 @@ const initialState = {
     data: {},
     state: API_STATE.DONE,
     error: null,
+    formData: {},
   },
 };
 
-const loginReducer = (state = initialState, action: ActionType): any => {
+const loginReducer = (
+  state = initialState,
+  action: ActionType
+): LoginStoreState => {
   const { type, payload } = action;
   const { login } = state;
   switch (type) {

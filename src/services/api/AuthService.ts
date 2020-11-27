@@ -20,7 +20,7 @@ class AuthService {
       }
     );
     const session: Session = result?.data;
-    const { access_token: accessToken } = session;
+    const { accessToken } = session;
     if (accessToken)
       BrowserHelper.setLocalStorageItem(AuthConstants.USER_TOKEN, accessToken);
     return session;
