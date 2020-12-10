@@ -1,9 +1,25 @@
 import React from "react";
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import secureDomain from "../hoc/SecureDomain";
+import "./Header.scss";
 
 class Header extends React.Component {
   render() {
-    return <>Header</>;
+    return (
+      <>
+        <Navbar bg="light" expand="lg" className="header">
+          <Navbar.Brand href="/">Food Delivery</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse className="singout-collapse">
+            <Nav>
+              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/signOut">Sign Out</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      </>
+    );
   }
 }
 

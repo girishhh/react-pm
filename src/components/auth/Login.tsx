@@ -1,13 +1,13 @@
 import React, { Dispatch } from "react";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
-import { Session } from "../../interfaces/CommonInterface";
+import { LocationProps, Session } from "../../interfaces/CommonInterface";
 import {
   LoginAction,
   LoginPayload,
   LoginStoreState,
 } from "../../interfaces/LoginInterface";
-import { fetchSession } from "../../redux/thunks/auth/FetchSession";
+import { fetchSession } from "../../redux/thunks/AuthThunks";
 import secureDomain from "../hoc/SecureDomain";
 import Form from "@rjsf/bootstrap-4";
 import { Row, Col, Spinner } from "react-bootstrap";
@@ -38,7 +38,7 @@ const mapDispatchToProps = (
   };
 };
 
-interface LoginProps {
+interface LoginProps extends LocationProps {
   session: Session;
   login(payload: LoginPayload): void;
   error: null | AxiosError;
@@ -47,10 +47,16 @@ interface LoginProps {
 
 class Login extends React.Component<LoginProps> {
   onSubmit = (event: ISubmitEvent<any>) => {
-    console.log("FORMDATA", event.formData);
     const { email, password } = event.formData;
     this.props.login({ email, password });
   };
+
+  componentDidUpdate(): void {
+    const { session, history } = this.props;
+    if (session && session.accessToken) {
+      history.push("/dashboard");
+    }
+  }
 
   render() {
     const { login, session, loadingState, error } = this.props;

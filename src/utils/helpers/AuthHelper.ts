@@ -25,6 +25,10 @@ export const getUser = (): UserInterface | undefined => {
   return undefined;
 };
 
+export const signOut = () => {
+  BrowserHelper.deleteLocalStorageItem(AuthConstants.USER_TOKEN);
+};
+
 // Setting the default base url to which the path should be appended.
 
 export function setBaseUrl(url: string): void {

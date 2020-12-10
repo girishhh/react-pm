@@ -1,0 +1,16 @@
+.common-table {
+  th[role="columnheader"] {
+    text-align: center;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  input {
+    width: 50px;
+  }
+  select {
+    width: 85px;
+  }
+}

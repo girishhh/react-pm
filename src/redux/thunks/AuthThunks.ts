@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
-import { LoginAction, LoginPayload } from "../../../interfaces/LoginInterface";
-import AuthService from "../../../services/api/AuthService";
+import { LoginAction, LoginPayload } from "../../interfaces/LoginInterface";
+import AuthService from "../../services/api/AuthService";
 
 export function fetchSession(formData: LoginPayload) {
   return async function loginThunk(dispatch: Dispatch<LoginAction>) {
