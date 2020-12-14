@@ -15,7 +15,9 @@ import { API_STATE, TABLE_CONSTANTS } from "../../utils/constants/common";
 import ApiError from "../common/ApiErrors";
 import { CommonTable } from "../common/CommonTable";
 import secureDomain from "../hoc/SecureDomain";
+import CompanyListHeader from "./CompanyListHeader";
 import TableActions from "./TableActions";
+import "./CompanyList.scss";
 
 interface CompanyProps extends LocationProps {
   companyList: CompanyInterface[];
@@ -52,13 +54,15 @@ const CompanyList: React.FC<CompanyProps> = ({
   companyListState,
   fetchCompanyList,
   companyListTotal,
+  history,
 }) => {
   const [pageCount, setPageCount] = React.useState(0);
 
   const columns = useMemo(
     () => [
       {
-        Header: "Company List",
+        id: "CompanyList",
+        Header: <CompanyListHeader />,
         columns: [
           {
             Header: "Name",
@@ -80,7 +84,9 @@ const CompanyList: React.FC<CompanyProps> = ({
             Header: "Actions",
             accessor: "_id",
             Cell: ({ cell }: { cell: CellValue }) => {
-              return cell.render(<TableActions companyId={cell.value} />);
+              return cell.render(
+                <TableActions companyId={cell.value} history={history} />
+              );
             },
           },
         ],

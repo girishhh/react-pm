@@ -1,6 +1,7 @@
 import Form from "@rjsf/bootstrap-4";
 import { ISubmitEvent } from "@rjsf/core";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
+import * as H from "history";
 import React, { Dispatch } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -18,10 +19,10 @@ import {
 import { API_STATE } from "../../utils/constants/common";
 import { ViewActionTypes } from "../../utils/constants/CompanyConstants";
 import { getUser } from "../../utils/helpers/AuthHelper";
+import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
 import ApiError from "../common/ApiErrors";
 import secureDomain from "../hoc/SecureDomain";
 import { companySchema, companyUISchema } from "./CompanySchema";
-import * as H from "history";
 
 interface Props extends LocationProps {
   companyDetails: CompanyInterface;
@@ -98,13 +99,14 @@ class CompanyView extends React.Component<Props> {
           </div>
         )}
         {companyDetailsLoadingState === API_STATE.ERROR && (
-          <ApiError errors={[companyDetailsError?.response?.data.message]} />
+          <ApiError errors={formatResponseErrors(companyDetailsError)} />
         )}
         {companyUpdateLoadingState === API_STATE.ERROR && (
-          <ApiError errors={[companyUpdateError?.response?.data.message]} />
+          <ApiError errors={formatResponseErrors(companyUpdateError)} />
         )}
         {companyDetailsLoadingState === API_STATE.DONE &&
-          companyUpdateLoadingState === API_STATE.DONE && (
+          (companyUpdateLoadingState === API_STATE.DONE ||
+            companyUpdateLoadingState === API_STATE.ERROR) && (
             <>
               {viewAction === ViewActionTypes.EDIT && canEditCompany && (
                 <Row className="w-100 justify-content-start pl-1">

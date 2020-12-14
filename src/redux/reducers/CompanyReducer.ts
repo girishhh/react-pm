@@ -21,6 +21,18 @@ const initialState = {
     error: null,
     formData: {},
   },
+  companyCreate: {
+    data: {},
+    state: API_STATE.DONE,
+    error: null,
+    formData: {},
+  },
+  companyDelete: {
+    data: {},
+    state: API_STATE.DONE,
+    error: null,
+    formData: {},
+  },
 };
 
 const companyReducer = (
@@ -28,7 +40,13 @@ const companyReducer = (
   action: ActionType
 ): CompanyStoreState => {
   const { type, payload } = action;
-  const { companyList, companyDetails, companyUpdate } = state;
+  const {
+    companyList,
+    companyDetails,
+    companyUpdate,
+    companyCreate,
+    companyDelete,
+  } = state;
   switch (type) {
     case "companies/list/loading":
       companyList.state = API_STATE.LOADING;
@@ -64,6 +82,28 @@ const companyReducer = (
     case "companies/update/data":
       companyUpdate.state = API_STATE.DONE;
       return { ...state, companyUpdate };
+
+    case "companies/create/loading":
+      companyCreate.state = API_STATE.LOADING;
+      return { ...state, companyCreate };
+    case "companies/create/error":
+      companyCreate.state = API_STATE.ERROR;
+      companyCreate.error = payload;
+      return { ...state, companyCreate };
+    case "companies/create/data":
+      companyCreate.state = API_STATE.DONE;
+      return { ...state, companyCreate };
+
+    case "companies/delete/loading":
+      companyDelete.state = API_STATE.LOADING;
+      return { ...state, companyDelete };
+    case "companies/delete/error":
+      companyDelete.state = API_STATE.ERROR;
+      companyDelete.error = payload;
+      return { ...state, companyDelete };
+    case "companies/delete/data":
+      companyDelete.state = API_STATE.DONE;
+      return { ...state, companyDelete };
     default:
       return state;
   }

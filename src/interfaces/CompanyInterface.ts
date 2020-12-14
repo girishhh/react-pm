@@ -5,6 +5,8 @@ export interface CompanyStoreState {
   companyList: DefaultResponse;
   companyDetails: DefaultResponse;
   companyUpdate: DefaultResponse;
+  companyCreate: DefaultResponse;
+  companyDelete: DefaultResponse;
 }
 
 export interface CompanyInterface {
@@ -51,6 +53,12 @@ export type CompanyAction = {
     | "companies/details/error"
     | "companies/update/data"
     | "companies/update/loading"
-    | "companies/update/error";
+    | "companies/update/error"
+    | "companies/create/data"
+    | "companies/create/loading"
+    | "companies/create/error"
+    | "companies/delete/data"
+    | "companies/delete/loading"
+    | "companies/delete/error";
   payload?: CompanyPayloadTypes;
 };

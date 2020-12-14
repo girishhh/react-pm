@@ -57,3 +57,29 @@ export function updateCompany(payload: CompanyInterface, history: H.History) {
     }
   };
 }
+
+export function createCompany(payload: CompanyInterface, history: H.History) {
+  return async function createCompanyThunk(dispatch: Dispatch<CompanyAction>) {
+    try {
+      dispatch({ type: "companies/create/loading" });
+      const data = await CompanyService.createCompany(payload);
+      dispatch({ type: "companies/create/data" });
+      if (data.status === 201) history.push("/companies");
+    } catch (error) {
+      dispatch({ type: "companies/create/error", payload: error });
+    }
+  };
+}
+
+export function deleteCompany(_id: string, history: H.History) {
+  return async function deleteCompanyThunk(dispatch: Dispatch<CompanyAction>) {
+    try {
+      dispatch({ type: "companies/delete/loading" });
+      const data = await CompanyService.deleteCompany(_id);
+      dispatch({ type: "companies/delete/data" });
+      if (data.status === 204) history.go(0);
+    } catch (error) {
+      dispatch({ type: "companies/delete/error", payload: error });
+    }
+  };
+}

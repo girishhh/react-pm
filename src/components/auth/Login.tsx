@@ -17,6 +17,7 @@ import { ISubmitEvent } from "@rjsf/core";
 import { API_STATE } from "../../utils/constants/common";
 import { AxiosError } from "axios";
 import ApiError from "../common/ApiErrors";
+import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
 
 const mapStateToProps = (state: { loginReducer: LoginStoreState }) => {
   const { login } = state.loginReducer;
@@ -70,7 +71,7 @@ class Login extends React.Component<LoginProps> {
                 <Spinner animation="border" />
               )}
               {loadingState === API_STATE.ERROR && (
-                <ApiError errors={[error?.response?.data.message]} />
+                <ApiError errors={formatResponseErrors(error)} />
               )}
               {(loadingState === API_STATE.DONE ||
                 loadingState === API_STATE.ERROR) && (

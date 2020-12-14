@@ -63,6 +63,40 @@ class CompanyService {
     });
     return result;
   }
+
+  static async createCompany(
+    company: CompanyInterface
+  ): Promise<AxiosResponse> {
+    const requestConfig = new APIParamsBuilderHelper(
+      CompanyConstants.COMPANY_LIST_API,
+      HTTP_METHODS.POST
+    )
+      .addRequestBody(company)
+      .build().getConfig;
+
+    const result = await APIHelper.sendRequest<CompanyInterface>(
+      requestConfig
+    ).catch((err: string) => {
+      throw err;
+    });
+    return result;
+  }
+
+  static async deleteCompany(_id: string): Promise<AxiosResponse> {
+    const requestConfig = new APIParamsBuilderHelper(
+      CompanyConstants.COMPANY_DETAILS_API,
+      HTTP_METHODS.DELETE
+    )
+      .addPathParams({ _id })
+      .build().getConfig;
+
+    const result = await APIHelper.sendRequest(requestConfig).catch(
+      (err: string) => {
+        throw err;
+      }
+    );
+    return result;
+  }
 }
 
 export default CompanyService;

@@ -9,7 +9,7 @@ class ApiError extends React.Component<ApiErrorProps> {
   render() {
     const { errors } = this.props;
     return (
-      <div className="api-errors">
+      <div className="api-errors pl-2">
         <ul>
           {errors.map((error: string) => (
             <li className="pt-1">{error}</li>

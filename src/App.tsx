@@ -5,6 +5,7 @@ import "./App.scss";
 import Login from "./components/auth/Login";
 import SignOut from "./components/auth/SignOut";
 import NotFound from "./components/common/NotFound";
+import CompanyCreate from "./components/companies/CompanyCreate";
 import CompanyList from "./components/companies/CompanyList";
 import CompanyView from "./components/companies/CompanyView";
 import Dashboard from "./components/dashboards/Dashboard";
@@ -21,19 +22,17 @@ class AppComponent extends React.Component {
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute exact path="/signOut" component={SignOut} />
             <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-
             <ProtectedRoute exact path="/companies" component={CompanyList} />
             <ProtectedRoute
               exact
               path="/companies/view/:companyId"
               component={CompanyView}
             />
-            {/* <ProtectedRoute
+            <ProtectedRoute
               exact
-              path="/companies/edit/:companyId"
-              component={CompanyEdit}
-            /> */}
-
+              path="/companies/create"
+              component={CompanyCreate}
+            />
             <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
             <Route path="*" component={NotFound} />
           </Switch>
