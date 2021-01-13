@@ -17,7 +17,12 @@ import { ISubmitEvent } from "@rjsf/core";
 import { API_STATE } from "../../utils/constants/common";
 import { AxiosError } from "axios";
 import ApiError from "../common/ApiErrors";
-import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
+import {
+  formatResponseErrors,
+  isAdminDomain,
+} from "../../utils/helpers/CommonHelper";
+import { ROLES } from "../../utils/constants/RoleConstants";
+import { NavLink } from "react-router-dom";
 
 const mapStateToProps = (state: { loginReducer: LoginStoreState }) => {
   const { login } = state.loginReducer;
@@ -49,7 +54,12 @@ interface LoginProps extends LocationProps {
 class Login extends React.Component<LoginProps> {
   onSubmit = (event: ISubmitEvent<any>) => {
     const { email, password } = event.formData;
-    this.props.login({ email, password });
+    const loginData: { email: string; password: string; role?: string } = {
+      email,
+      password,
+    };
+    if (isAdminDomain()) loginData.role = ROLES.ADMIN;
+    this.props.login(loginData);
   };
 
   componentDidUpdate(): void {
@@ -60,7 +70,7 @@ class Login extends React.Component<LoginProps> {
   }
 
   render() {
-    const { login, session, loadingState, error } = this.props;
+    const { loadingState, error } = this.props;
 
     return (
       <>
@@ -85,6 +95,18 @@ class Login extends React.Component<LoginProps> {
                   noHtml5Validate
                 />
               )}
+              <span className="pt-2 d-flex">
+                Dont have account? please{" "}
+                <NavLink to="/signUp" className="pl-2">
+                  SignUp
+                </NavLink>
+              </span>
+              <span className="pt-2 d-flex">
+                Did not recieve account confirmation instructions?{" "}
+                <NavLink to="/users/resend-confirmation" className="pl-2">
+                  ReSend Confirmation mail.
+                </NavLink>
+              </span>
             </div>
           </Col>
         </Row>

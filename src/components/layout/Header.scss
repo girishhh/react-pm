@@ -2,4 +2,8 @@
   .singout-collapse {
     justify-content: flex-end;
   }
+  .dropdown-menu.show {
+    left: unset;
+    right: 0;
+  }
 }

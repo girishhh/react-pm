@@ -14,6 +14,7 @@ import { deleteCompany } from "../../redux/thunks/CompanyThunks";
 import { API_STATE } from "../../utils/constants/common";
 import { AxiosError } from "axios";
 import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
+import { ROLES } from "../../utils/constants/RoleConstants";
 
 interface Props {
   companyId: string;
@@ -83,6 +84,11 @@ const TableActions: React.FC<Props> = ({
       >
         <span>delete</span>
       </Button>
+      <NavLink
+        to={`/users/create?role=${ROLES.COMPANY_ADMIN}&&companyId=${companyId}`}
+      >
+        addAdmin
+      </NavLink>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { getUser } from "../../utils/helpers/AuthHelper";
 import secureDomain from "../hoc/SecureDomain";
 import "./Header.scss";
 
@@ -12,7 +13,7 @@ class Header extends React.Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="singout-collapse">
             <Nav>
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+              <NavDropdown title={getUser()?.firstName} id="basic-nav-dropdown">
                 <NavDropdown.Item href="/signOut">Sign Out</NavDropdown.Item>
               </NavDropdown>
             </Nav>

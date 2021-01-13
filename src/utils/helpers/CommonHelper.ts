@@ -1,5 +1,7 @@
 import { AxiosError } from "axios";
+import { parseDomain } from "parse-domain";
 import { RoleInterface } from "../../interfaces/RoleInterface";
+import { ROLES } from "../constants/RoleConstants";
 
 export const hasRole = (roles: RoleInterface[], roleName: string): boolean => {
   let roleExists = false;
@@ -24,4 +26,10 @@ export const formatResponseErrors = (error: AxiosError | any): string[] => {
     }
   }
   return errorArray;
+};
+
+export const isAdminDomain = (): boolean => {
+  const parsedResult = parseDomain(window.location.host) as any;
+  if (parsedResult.subDomains[0] === ROLES.ADMIN) return true;
+  return false;
 };

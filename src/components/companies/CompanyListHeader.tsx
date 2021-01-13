@@ -1,5 +1,4 @@
 import React from "react";
-import { Row } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
 const CompanyListHeader: React.FC = () => {

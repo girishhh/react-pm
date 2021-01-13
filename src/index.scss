@@ -1,4 +1,9 @@
 @import "form";
+@import "colors";
+
+.success-msg {
+  color: $green;
+}
 
 body {
   margin: 0;
