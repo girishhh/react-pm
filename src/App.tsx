@@ -12,6 +12,8 @@ import CompanyCreate from "./components/companies/CompanyCreate";
 import CompanyList from "./components/companies/CompanyList";
 import CompanyView from "./components/companies/CompanyView";
 import Dashboard from "./components/dashboards/Dashboard";
+import FoodCategoryCreate from "./components/food-categories/FoodCategoryCreate";
+import FoodCategoryList from "./components/food-categories/FoodCategoryList";
 import AuthRoute from "./components/hoc/AuthRoutes";
 import ProtectedRoute from "./components/hoc/ProtectedRoute";
 import RestaurentCreate from "./components/restaurents/RestaurentCreate";
@@ -69,6 +71,27 @@ class AppComponent extends React.Component {
               exact
               path="/restaurents/create"
               component={RestaurentCreate}
+            />
+            <ProtectedRoute
+              exact
+              path="/restaurents/edit/:restaurentId"
+              component={RestaurentCreate}
+            />
+
+            <ProtectedRoute
+              exact
+              path="/food-categories"
+              component={FoodCategoryList}
+            />
+            <ProtectedRoute
+              exact
+              path="/food-categories/create"
+              component={FoodCategoryCreate}
+            />
+            <ProtectedRoute
+              exact
+              path="/food-categories/edit/:foodCategoryId"
+              component={FoodCategoryCreate}
             />
 
             <Route exact path="/" render={() => <Redirect to="/dashboard" />} />

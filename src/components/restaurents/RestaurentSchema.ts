@@ -18,12 +18,9 @@ export const restaurentSchema: JSONSchema7 = {
       title: "Longitude",
     },
     geo_location_description: {
-      type: "string",
-      title: "Ge Location",
-    },
-    google_auto_place: {
       type: "object",
-      title: "Select Place",
+      title: "Ge Location",
+      required: ["formatted_address"],
     },
   },
 };
@@ -33,9 +30,12 @@ export const restaurentUISchema = {
     "ui:autofocus": true,
   },
   geo_location_description: {
-    classNames: "task-title foo-bar",
-  },
-  google_auto_place: {
     "ui:field": "geo",
+  },
+  lat: {
+    "ui:field": "kar",
+  },
+  lng: {
+    "ui:readonly": true,
   },
 };

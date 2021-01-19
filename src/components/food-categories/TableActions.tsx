@@ -6,55 +6,54 @@ import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import {
-  RestaurentAction,
-  RestaurentStoreState,
-} from "../../interfaces/RestaurentInterface";
-import { deleteRestaurent } from "../../redux/thunks/RestaurentThunks";
+  FoodCategoryStoreState,
+  FoodCategoryAction,
+} from "../../interfaces/FoodCategoryInterface";
+import { deleteFoodCategory } from "../../redux/thunks/FoodThunks";
 import { API_STATE } from "../../utils/constants/common";
-import { ROLES } from "../../utils/constants/RoleConstants";
 import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
 import CommonModal from "../common/CommonModal";
 import secureDomain from "../hoc/SecureDomain";
 
 interface Props {
-  restaurentId: string;
-  restaurentDeleteError: null | AxiosError;
-  restaurentDeleteLoadingState: string;
+  foodCategoryId: string;
+  foodCategoryDeleteError: null | AxiosError;
+  foodCategoryDeleteLoadingState: string;
   history: H.History;
-  deleteRestaurent(_id: string, history: H.History): void;
+  deleteFoodCategory(_id: string, history: H.History): void;
 }
 
 const mapStateToProps = (state: {
-  restaurentReducer: RestaurentStoreState;
+  foodCategoryReducer: FoodCategoryStoreState;
 }) => {
-  const { restaurentDelete } = state.restaurentReducer;
+  const { foodCategoryDelete } = state.foodCategoryReducer;
   return {
-    restaurentDeleteError: restaurentDelete.error,
-    restaurentDeleteLoadingState: restaurentDelete.state,
+    foodCategoryDeleteError: foodCategoryDelete.error,
+    foodCategoryDeleteLoadingState: foodCategoryDelete.state,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: Dispatch<RestaurentAction> | ThunkDispatch<{}, {}, any>
+  dispatch: Dispatch<FoodCategoryAction> | ThunkDispatch<{}, {}, any>
 ) => {
   return {
-    deleteRestaurent: (_id: string, history: H.History) => {
+    deleteFoodCategory: (_id: string, history: H.History) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(deleteRestaurent(_id, history));
+      thunkDispatch(deleteFoodCategory(_id, history));
     },
   };
 };
 
 const TableActions: React.FC<Props> = ({
-  restaurentId,
-  restaurentDeleteLoadingState,
-  restaurentDeleteError,
+  foodCategoryId,
+  foodCategoryDeleteLoadingState,
+  foodCategoryDeleteError,
   history,
-  deleteRestaurent,
+  deleteFoodCategory,
 }) => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const onConfirm = () => {
-    deleteRestaurent(restaurentId, history);
+    deleteFoodCategory(foodCategoryId, history);
   };
   const hideDialog = () => setShowDialog(false);
 
@@ -63,20 +62,14 @@ const TableActions: React.FC<Props> = ({
       <CommonModal
         onConfirm={onConfirm}
         hideDialog={hideDialog}
-        title="Delete Restaurent"
+        title="Delete FoodCategory"
         body="Are you sure you want to delete this?"
         confirmText="Delete"
         show={showDialog}
-        loading={restaurentDeleteLoadingState === API_STATE.LOADING}
-        errors={formatResponseErrors(restaurentDeleteError)}
+        loading={foodCategoryDeleteLoadingState === API_STATE.LOADING}
+        errors={formatResponseErrors(foodCategoryDeleteError)}
       />
-      <NavLink
-        to={`/restaurents/view/${restaurentId}?viewAction=view`}
-        className="pr-2"
-      >
-        view
-      </NavLink>
-      <NavLink to={`/restaurents/edit/${restaurentId}`}>edit</NavLink>
+      <NavLink to={`/food-categories/edit/${foodCategoryId}`}>edit</NavLink>
       <Button
         variant="link"
         className="delete-btn"
@@ -84,11 +77,6 @@ const TableActions: React.FC<Props> = ({
       >
         <span>delete</span>
       </Button>
-      <NavLink
-        to={`/users/create?role=${ROLES.OWNER}&&restaurentId=${restaurentId}`}
-      >
-        addOwner
-      </NavLink>
     </>
   );
 };

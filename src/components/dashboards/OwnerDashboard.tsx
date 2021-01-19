@@ -5,7 +5,7 @@ import { ROLES } from "../../utils/constants/RoleConstants";
 import { getUser } from "../../utils/helpers/AuthHelper";
 import secureDomain from "../hoc/SecureDomain";
 
-class CompanyAdminDashboard extends React.Component {
+class OwnerDashboard extends React.Component {
   render() {
     const user = getUser();
     return (
@@ -26,4 +26,4 @@ class CompanyAdminDashboard extends React.Component {
   }
 }
 
-export default secureDomain(CompanyAdminDashboard);
+export default secureDomain(OwnerDashboard);

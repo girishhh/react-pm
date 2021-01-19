@@ -3,7 +3,13 @@ import { UserStoreState } from "../../interfaces/UserInterface";
 import { API_STATE } from "../../utils/constants/common";
 
 const initialState = {
-  createUser: {
+  userCreate: {
+    data: {},
+    state: API_STATE.DONE,
+    error: null,
+    formData: {},
+  },
+  userList: {
     data: {},
     state: API_STATE.DONE,
     error: null,
@@ -22,32 +28,44 @@ const userReducer = (
   action: ActionType
 ): UserStoreState => {
   const { type, payload } = action;
-  const { createUser, reSendConfirmation } = state;
+  const { userCreate, userList, reSendConfirmation } = state;
   switch (type) {
-    case "createUser/loading":
-      createUser.state = API_STATE.LOADING;
-      return { ...state, createUser };
-    case "createUser/error":
-      createUser.state = API_STATE.ERROR;
-      createUser.error = payload;
-      return { ...state, createUser };
-    case "createUser/data":
-      createUser.data = payload;
-      createUser.state = API_STATE.DONE;
-      return { ...state, createUser };
+    case "users/create/loading":
+      userCreate.state = API_STATE.LOADING;
+      return { ...state, userCreate };
+    case "users/create/error":
+      userCreate.state = API_STATE.ERROR;
+      userCreate.error = payload;
+      return { ...state, userCreate };
+    case "users/create/data":
+      userCreate.data = payload;
+      userCreate.state = API_STATE.DONE;
+      return { ...state, userCreate };
 
-    case "reSendConfirmation/loading":
+    case "users/reSendConfirmation/loading":
       reSendConfirmation.data = {};
       reSendConfirmation.state = API_STATE.LOADING;
       return { ...state, reSendConfirmation };
-    case "reSendConfirmation/error":
+    case "users/reSendConfirmation/error":
       reSendConfirmation.state = API_STATE.ERROR;
       reSendConfirmation.error = payload;
       return { ...state, reSendConfirmation };
-    case "reSendConfirmation/data":
+    case "users/reSendConfirmation/data":
       reSendConfirmation.data = payload;
       reSendConfirmation.state = API_STATE.DONE;
       return { ...state, reSendConfirmation };
+
+    case "users/list/loading":
+      userList.state = API_STATE.LOADING;
+      return { ...state, userList };
+    case "users/list/error":
+      userList.state = API_STATE.ERROR;
+      userList.error = payload;
+      return { ...state, userList };
+    case "users/list/data":
+      userList.data = payload;
+      userList.state = API_STATE.DONE;
+      return { ...state, userList };
     default:
       return state;
   }

@@ -54,6 +54,7 @@ export type RestaurentAction = {
     | "restaurents/details/data"
     | "restaurents/details/loading"
     | "restaurents/details/error"
+    | "restaurents/details/reset"
     | "restaurents/update/data"
     | "restaurents/update/loading"
     | "restaurents/update/error"

@@ -21,4 +21,8 @@ interface Session {
   session_state: string;
 }
 
-export type { LocationProps, ActionType, Session };
+interface KeyValue {
+  [key: string]: any;
+}
+
+export type { LocationProps, ActionType, Session, KeyValue };

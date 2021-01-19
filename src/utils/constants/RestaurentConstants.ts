@@ -4,7 +4,4 @@ export enum RestaurentConstants {
   RESTAURENT_UPDATE_API = RESTAURENT_DETAILS_API,
 }
 
-export enum ViewActionTypes {
-  VIEW = "view",
-  EDIT = "edit",
-}
+export const EDIT_PATH = new RegExp("^/restaurents/edit");

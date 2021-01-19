@@ -17,7 +17,7 @@ import {
   updateCompany,
 } from "../../redux/thunks/CompanyThunks";
 import { API_STATE } from "../../utils/constants/common";
-import { ViewActionTypes } from "../../utils/constants/CompanyConstants";
+import { ViewActionTypes } from "../../utils/constants/common";
 import { getUser } from "../../utils/helpers/AuthHelper";
 import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
 import ApiError from "../common/ApiErrors";

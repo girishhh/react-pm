@@ -24,6 +24,24 @@ export const userSchema: JSONSchema7 = {
   },
 };
 
+export const selectExistingOwnerSchema: JSONSchema7 = {
+  title: "Enter email ",
+  required: ["existingOwner"],
+  properties: {
+    existingOwner: {
+      type: "string",
+      title: "Select Existing Owner",
+    },
+  },
+};
+
+export const selectExistingOwnerUISchema = {
+  existingOwner: {
+    "ui:autofocus": true,
+    "ui:field": "userAutoComplete",
+  },
+};
+
 export const userUISchema = {
   firstName: {
     "ui:autofocus": true,

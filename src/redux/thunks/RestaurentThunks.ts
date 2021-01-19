@@ -34,6 +34,7 @@ export function fetchRestaurentDetails(payload: RestaurentDetailsPayload) {
   ) {
     try {
       dispatch({ type: "restaurents/details/loading" });
+      dispatch({ type: "restaurents/details/reset" });
       const data = await RestaurentService.fetchRestaurentDetails(payload._id);
       dispatch({
         type: "restaurents/details/data",

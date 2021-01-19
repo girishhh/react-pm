@@ -71,6 +71,11 @@ const restaurentReducer = (
       restaurentDetails.data = payload;
       restaurentDetails.state = API_STATE.DONE;
       return { ...state, restaurentDetails };
+    case "restaurents/details/reset":
+      return {
+        ...state,
+        restaurentDetails: { ...initialState.restaurentDetails },
+      };
 
     case "restaurents/update/loading":
       restaurentUpdate.state = API_STATE.LOADING;

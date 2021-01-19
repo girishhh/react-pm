@@ -1,5 +1,6 @@
 import { AddressInterface } from "./AddressInterface";
 import { CompanyInterface } from "./CompanyInterface";
+import { RestaurentInterface } from "./RestaurentInterface";
 import { RoleInterface } from "./RoleInterface";
 import { DefaultResponse } from "./StoreInterface";
 
@@ -17,26 +18,46 @@ export interface UserInterface {
   populatePermissions: Function;
   JSON: Function;
   permissions: string[];
+  restaurents: RestaurentInterface[] | string[];
 }
 
 export interface UserStoreState {
-  createUser: DefaultResponse;
+  userCreate: DefaultResponse;
+  userList: DefaultResponse;
   reSendConfirmation: DefaultResponse;
 }
 
 export interface CreateUserSuccessMsg {
   message: string;
 }
-export type UserPayloadTypes = UserInterface | CreateUserSuccessMsg;
+
+export interface UserListResp {
+  total: number;
+  userList: UserInterface[];
+}
+
+export interface UserListReqPayLoad {
+  start: number;
+  limit: number;
+  conditions: string;
+}
+
+export type UserPayloadTypes =
+  | UserInterface
+  | CreateUserSuccessMsg
+  | UserListResp;
 
 export type UserAction = {
   type:
-    | "createUser/data"
-    | "createUser/loading"
-    | "createUser/error"
-    | "reSendConfirmation/data"
-    | "reSendConfirmation/loading"
-    | "reSendConfirmation/error";
+    | "users/create/data"
+    | "users/create/loading"
+    | "users/create/error"
+    | "users/reSendConfirmation/data"
+    | "users/reSendConfirmation/loading"
+    | "users/reSendConfirmation/error"
+    | "users/list/data"
+    | "users/list/loading"
+    | "users/list/error";
   payload?: UserPayloadTypes;
 };
 

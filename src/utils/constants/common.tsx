@@ -18,4 +18,15 @@ enum TABLE_CONSTANTS {
   PAGE_SIZE = 10,
 }
 
+export enum ViewActionTypes {
+  VIEW = "view",
+  EDIT = "edit",
+  CREATE = "create",
+}
+
+export enum PaginationConstants {
+  INFINITE = 999999999999,
+  ZERO = 0,
+}
+
 export { ALLOWED_SUB_DOMAINS, HTTP_METHODS, API_STATE, TABLE_CONSTANTS };
