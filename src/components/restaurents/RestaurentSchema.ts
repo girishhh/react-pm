@@ -18,7 +18,7 @@ export const restaurentSchema: JSONSchema7 = {
       title: "Longitude",
     },
     geo_location_description: {
-      type: "object",
+      type: "string",
       title: "Ge Location",
       required: ["formatted_address"],
     },
@@ -33,7 +33,7 @@ export const restaurentUISchema = {
     "ui:field": "geo",
   },
   lat: {
-    "ui:field": "kar",
+    "ui:readonly": true,
   },
   lng: {
     "ui:readonly": true,

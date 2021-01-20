@@ -5,7 +5,6 @@ import { Form } from "react-bootstrap";
 const LatTextInput: React.FC<FieldProps> = (
   props: FieldProps
 ): ReactElement => {
-  console.log("LAAAAAAAAAAAAA", props);
   return (
     <>
       <Form>

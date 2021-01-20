@@ -19,27 +19,19 @@ interface Props extends FieldProps {
 const GooglePlacesAutoComplete = withScriptjs(
   withGoogleMap((props: Props) => {
     const refs: ReferenceType = {};
-
     const onSearchBoxMounted = (ref: StandaloneSearchBox) => {
       refs.searchBox = ref;
     };
-
-    const [placeName, setPlaceName] = useState(
-      props.formData.formatted_address
-    );
+    const formData = props.formData ? JSON.parse(props.formData) : {};
+    const [placeName, setPlaceName] = useState(formData.formatted_address);
 
     useEffect(() => {
-      if (props.formData.formatted_address)
-        setPlaceName(props.formData.formatted_address);
-    }, [props.formData.formatted_address]);
+      if (formData.formatted_address) setPlaceName(formData.formatted_address);
+    }, [formData.formatted_address]);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
       if (!event.target.value) {
-        props.onChange({
-          formatted_address: undefined,
-          lat: undefined,
-          lng: undefined,
-        });
+        props.onChange(undefined);
       }
       setPlaceName(event.target.value);
     };
@@ -50,11 +42,13 @@ const GooglePlacesAutoComplete = withScriptjs(
         formatted_address,
         geometry: { location },
       } = places?.[0];
-      props.onChange({
-        formatted_address,
-        lat: location.lat(),
-        lng: location.lng(),
-      });
+      props.onChange(
+        JSON.stringify({
+          formatted_address,
+          lat: location.lat(),
+          lng: location.lng(),
+        })
+      );
     };
 
     return (
@@ -68,13 +62,6 @@ const GooglePlacesAutoComplete = withScriptjs(
             <Form.Group controlId="exampleForm.ControlInput1">
               <Form.Label>Search Nearby Place*</Form.Label>
               <Form.Control onChange={onChange} type="text" value={placeName} />
-              {props.formContext.geo_location_required_error && (
-                <div>
-                  <ul className="error-detail bs-callout bs-callout-info">
-                    <li className="text-danger">is a required property</li>
-                  </ul>
-                </div>
-              )}
             </Form.Group>
           </Form>
         </StandaloneSearchBox>

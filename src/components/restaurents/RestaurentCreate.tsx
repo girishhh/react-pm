@@ -42,13 +42,8 @@ interface Props extends LocationProps {
   fetchRestaurentDetails(_id: string): void;
 }
 
-interface FormContext {
-  geo_location_required_error: boolean;
-}
-
 interface State {
   formData: RestaurentInterface | {};
-  formContext: FormContext;
 }
 
 const mapStateToProps = (state: {
@@ -92,8 +87,7 @@ const mapDispatchToProps = (
 
 class RestaurentCreate extends React.Component<Props, State> {
   state = {
-    formData: { name: undefined, lat: 0, lng: 0, geo_location_description: {} },
-    formContext: { geo_location_required_error: false },
+    formData: {},
   };
   canEditRestaurent: boolean;
   viewAction: string;
@@ -113,8 +107,11 @@ class RestaurentCreate extends React.Component<Props, State> {
 
   onSubmit = (event: ISubmitEvent<any>) => {
     const formData = event.formData;
+    const geo_location_description = JSON.parse(
+      formData.geo_location_description
+    );
     formData.geo_location_description =
-      formData.geo_location_description.formatted_address;
+      geo_location_description.formatted_address;
     if (this.viewAction === ViewActionTypes.EDIT) {
       this.props.updateRestaurent(formData, this.props.history);
     } else {
@@ -123,33 +120,13 @@ class RestaurentCreate extends React.Component<Props, State> {
   };
 
   onChange = (event: ISubmitEvent<any>) => {
-    const formData = loadash.cloneDeep(event.formData);
-    if (
-      !lodash.isEmpty(formData.geo_location_description) &&
-      this.state.formData.lat !== formData.geo_location_description.lat &&
-      this.state.formData.lng !== formData.geo_location_description.lng
-    ) {
-      formData.lat = formData.geo_location_description.lat;
-      formData.lng = formData.geo_location_description.lng;
-      this.setState({ formData: formData });
-    }
-  };
-
-  onError = (errors: AjvError[]) => {
-    let geo_location_required_error = false;
-    for (let i = 0; i < errors.length; i++) {
-      if (
-        errors[i].property === ".geo_location_description.formatted_address"
-      ) {
-        geo_location_required_error = true;
-        break;
-      }
-    }
-    if (geo_location_required_error) {
-      this.setState({ formContext: { geo_location_required_error } });
-    } else {
-      this.setState({ formContext: { geo_location_required_error: false } });
-    }
+    const formData = lodash.cloneDeep(event.formData);
+    const geo_location_description = formData.geo_location_description
+      ? JSON.parse(formData.geo_location_description)
+      : {};
+    formData.lat = geo_location_description.lat;
+    formData.lng = geo_location_description.lng;
+    this.setState({ formData: formData });
   };
 
   componentDidMount(): void {
@@ -172,11 +149,11 @@ class RestaurentCreate extends React.Component<Props, State> {
       this.setState({
         formData: {
           ...restaurentDetails,
-          geo_location_description: {
+          geo_location_description: JSON.stringify({
             lat: restaurentDetails.lat,
             lng: restaurentDetails.lng,
             formatted_address: restaurentDetails.geo_location_description,
-          },
+          }),
         },
       });
     }
@@ -207,8 +184,9 @@ class RestaurentCreate extends React.Component<Props, State> {
 
     const fields = {
       geo: RenderGooglePlaces,
-      kar: LatTextInput,
     };
+
+    console.log("STATE FORM", this.state.formData);
 
     return (
       <div className="restaurent-create">
@@ -231,15 +209,11 @@ class RestaurentCreate extends React.Component<Props, State> {
                 id="restaurent-view-form"
                 schema={restaurentSchema}
                 uiSchema={restaurentUISchema}
-                formContext={this.state.formContext}
                 formData={this.state.formData}
-                //@ts-ignore
                 fields={fields}
                 showErrorList={false}
                 onSubmit={this.onSubmit}
                 onChange={this.onChange}
-                onError={this.onError}
-                //@ts-ignore
                 noHtml5Validate
               />
             </Col>
