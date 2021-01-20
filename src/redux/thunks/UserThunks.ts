@@ -1,4 +1,5 @@
 import { Dispatch } from "react";
+import * as H from "history";
 import {
   UserInterface,
   UserAction,
@@ -10,11 +11,13 @@ export function fetchUserList(payload: UserListReqPayLoad) {
   return async function fetchUserListThunk(dispatch: Dispatch<UserAction>) {
     try {
       dispatch({ type: "users/list/loading" });
+      dispatch({ type: "users/list/reset" });
       const data = await UserService.fetchUserList(
         payload.start,
         payload.limit,
         payload.conditions
       );
+      console.log("USER LIST", data);
       dispatch({
         type: "users/list/data",
         payload: data,
@@ -40,6 +43,19 @@ export function createUser(formData: UserInterface) {
         });
     } catch (error) {
       dispatch({ type: "users/create/error", payload: error });
+    }
+  };
+}
+
+export function updateUser(payload: UserInterface, history: H.History) {
+  return async function updateUserThunk(dispatch: Dispatch<UserAction>) {
+    try {
+      dispatch({ type: "users/update/loading" });
+      const data = await UserService.updateUser(payload);
+      dispatch({ type: "users/update/data" });
+      if (data.status === 204) history.push("/restaurents");
+    } catch (error) {
+      dispatch({ type: "users/update/error", payload: error });
     }
   };
 }

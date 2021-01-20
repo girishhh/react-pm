@@ -43,6 +43,23 @@ class UserService {
     return result;
   }
 
+  static async updateUser(user: UserInterface): Promise<AxiosResponse> {
+    const requestConfig = new APIParamsBuilderHelper(
+      UserConstants.UPDATE_USER,
+      HTTP_METHODS.PUT
+    )
+      .addPathParams({ _id: user._id })
+      .addRequestBody(user)
+      .build().getConfig;
+
+    const result = await APIHelper.sendRequest<UserInterface>(
+      requestConfig
+    ).catch((err: string) => {
+      throw err;
+    });
+    return result;
+  }
+
   static async reSendConfirmation(email: string): Promise<AxiosResponse> {
     const requestConfig = new APIParamsBuilderHelper(
       UserConstants.RESEND_CONFIRMN_INSTRUCTIONS,

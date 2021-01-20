@@ -1,6 +1,7 @@
 import Form from "@rjsf/bootstrap-4";
 import { ISubmitEvent } from "@rjsf/core";
 import { AxiosError } from "axios";
+import * as H from "history";
 import React, { Dispatch } from "react";
 import { Row, Spinner, Tab, Tabs } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -13,7 +14,7 @@ import {
   UserPayloadTypes,
   UserStoreState,
 } from "../../interfaces/UserInterface";
-import { createUser } from "../../redux/thunks/UserThunks";
+import { createUser, updateUser } from "../../redux/thunks/UserThunks";
 import { API_STATE } from "../../utils/constants/common";
 import { ROLES } from "../../utils/constants/RoleConstants";
 import {
@@ -35,8 +36,11 @@ import UserAutoComplete from "./UserAutoComplete";
 interface Props extends LocationProps {
   createUser(payload: UserPayloadTypes): void;
   error: null | AxiosError;
-  loadingState: string;
+  userCreateLoadingState: string;
   userCreateRespData: CreateUserSuccessMsg;
+  userUpdateError: null | AxiosError;
+  userUpdateLoadingState: string;
+  updateUser(user: UserInterface, history: H.History): void;
 }
 
 interface State {
@@ -44,11 +48,13 @@ interface State {
 }
 
 const mapStateToProps = (state: { userReducer: UserStoreState }) => {
-  const { userCreate } = state.userReducer;
+  const { userCreate, userUpdate } = state.userReducer;
   return {
     userCreateRespData: userCreate.data,
     error: userCreate.error,
-    loadingState: userCreate.state,
+    userCreateLoadingState: userCreate.state,
+    userUpdateError: userUpdate.error,
+    userUpdateLoadingState: userUpdate.state,
   };
 };
 
@@ -59,6 +65,10 @@ const mapDispatchToProps = (
     createUser: (payload: UserInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
       thunkDispatch(createUser(payload));
+    },
+    updateUser: (user: UserInterface, history: H.History) => {
+      const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
+      thunkDispatch(updateUser(user, history));
     },
   };
 };
@@ -95,12 +105,26 @@ class UserCreate extends React.Component<Props, State> {
   };
 
   onOwnerSubmit = (event: ISubmitEvent<any>) => {
-    const formData = event.formData;
-    console.log("FORM DATA", JSON.parse(formData.existingOwner));
+    const formData = JSON.parse(event.formData.existingOwner);
+    this.props.updateUser(formData, this.props.history);
+  };
+
+  isLoading = (): boolean => {
+    return (
+      this.props.userCreateLoadingState === API_STATE.LOADING ||
+      this.props.userUpdateLoadingState === API_STATE.LOADING
+    );
+  };
+
+  isError = (): boolean => {
+    return (
+      this.props.userCreateLoadingState === API_STATE.ERROR ||
+      this.props.userUpdateLoadingState === API_STATE.ERROR
+    );
   };
 
   render() {
-    const { error, loadingState, userCreateRespData } = this.props;
+    const { error, userCreateLoadingState, userCreateRespData } = this.props;
     const urlSearch = new URLSearchParams(this.props.location.search);
     this.role = urlSearch.get("role") as string;
     const restaurentId = urlSearch.get("restaurentId") as string;
@@ -126,12 +150,9 @@ class UserCreate extends React.Component<Props, State> {
         {userCreateRespData && userCreateRespData.message && (
           <Row className="success-msg">{userCreateRespData.message}</Row>
         )}
-        {loadingState === API_STATE.LOADING && <Spinner animation="border" />}
-        {loadingState === API_STATE.ERROR && (
-          <ApiError errors={formatResponseErrors(error)} />
-        )}
-        {(loadingState === API_STATE.DONE ||
-          loadingState === API_STATE.ERROR) && (
+        {this.isLoading() && <Spinner animation="border" />}
+        {this.isError() && <ApiError errors={formatResponseErrors(error)} />}
+        {!this.isLoading() && (
           <>
             {this.role === ROLES.OWNER ? (
               <>

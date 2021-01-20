@@ -65,9 +65,9 @@ const UserAutoComplete: React.FC<Props> = ({
         isLoading={userListState === API_STATE.LOADING}
         onSearch={(query) => {
           const conditions = {
-            roles: { eq: [ROLES.OWNER] },
+            roles: { in: [ROLES.OWNER] },
             email: { contains: query },
-            restaurents: { ne: [restaurentId] },
+            restaurents: { nin: [restaurentId] },
           };
           fetchUserList({
             start: PaginationConstants.ZERO,
@@ -77,9 +77,13 @@ const UserAutoComplete: React.FC<Props> = ({
         }}
         options={userList}
         onChange={(selected: UserInterface[]) => {
-          let user = selected[0];
-          user = { ...user, restaurents: [...user.restaurents, restaurentId] };
-          onChange(JSON.stringify(user));
+          const user = selected[0];
+          onChange(
+            JSON.stringify({
+              _id: user._id,
+              restaurents: [...user.restaurents, restaurentId],
+            })
+          );
         }}
       />
     </>

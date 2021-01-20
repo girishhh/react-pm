@@ -15,6 +15,12 @@ const initialState = {
     error: null,
     formData: {},
   },
+  userUpdate: {
+    data: {},
+    state: API_STATE.DONE,
+    error: null,
+    formData: {},
+  },
   reSendConfirmation: {
     data: {},
     state: API_STATE.DONE,
@@ -28,7 +34,7 @@ const userReducer = (
   action: ActionType
 ): UserStoreState => {
   const { type, payload } = action;
-  const { userCreate, userList, reSendConfirmation } = state;
+  const { userCreate, userList, userUpdate, reSendConfirmation } = state;
   switch (type) {
     case "users/create/loading":
       userCreate.state = API_STATE.LOADING;
@@ -66,6 +72,20 @@ const userReducer = (
       userList.data = payload;
       userList.state = API_STATE.DONE;
       return { ...state, userList };
+    case "users/list/reset":
+      userList.data = {};
+      return { ...state, userList };
+
+    case "users/update/loading":
+      userUpdate.state = API_STATE.LOADING;
+      return { ...state, userUpdate };
+    case "users/update/error":
+      userUpdate.state = API_STATE.ERROR;
+      userUpdate.error = payload;
+      return { ...state, userUpdate };
+    case "users/update/data":
+      userUpdate.state = API_STATE.DONE;
+      return { ...state, userUpdate };
     default:
       return state;
   }

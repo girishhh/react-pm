@@ -5,6 +5,7 @@ import { RoleInterface } from "./RoleInterface";
 import { DefaultResponse } from "./StoreInterface";
 
 export interface UserInterface {
+  _id: string;
   firstName: string;
   lastName: string;
   address: AddressInterface;
@@ -24,6 +25,7 @@ export interface UserInterface {
 export interface UserStoreState {
   userCreate: DefaultResponse;
   userList: DefaultResponse;
+  userUpdate: DefaultResponse;
   reSendConfirmation: DefaultResponse;
 }
 
@@ -57,7 +59,11 @@ export type UserAction = {
     | "users/reSendConfirmation/error"
     | "users/list/data"
     | "users/list/loading"
-    | "users/list/error";
+    | "users/list/error"
+    | "users/list/reset"
+    | "users/update/data"
+    | "users/update/loading"
+    | "users/update/error";
   payload?: UserPayloadTypes;
 };
 
