@@ -7,6 +7,7 @@ import { restaurentReducer } from "./reducers/RestaurentReducer";
 import { userReducer } from "./reducers/UserReducer";
 import { activateAccountReducer } from "./reducers/auth/ActivateAccountReducer";
 import { foodCategoryReducer } from "./reducers/FoodCategoryReducer";
+import { foodItemReducer } from "./reducers/FoodItemReducer";
 
 const rootReducer = combineReducers({
   loginReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   userReducer,
   restaurentReducer,
   foodCategoryReducer,
+  foodItemReducer,
 });
 
 export default createStore(rootReducer, applyMiddleware(thunk));

@@ -3,7 +3,11 @@ import { parseDomain } from "parse-domain";
 import { RoleInterface } from "../../interfaces/RoleInterface";
 import { ROLES } from "../constants/RoleConstants";
 
-export const hasRole = (roles: RoleInterface[], roleName: string): boolean => {
+export const hasRole = (
+  roles: RoleInterface[] | undefined,
+  roleName: string
+): boolean => {
+  if (!roles) return false;
   let roleExists = false;
   for (let i = 0; i < roles.length; i++) {
     if (roles[i].name === roleName) {

@@ -7,6 +7,7 @@ import { hasRole } from "../../utils/helpers/CommonHelper";
 import secureDomain from "../hoc/SecureDomain";
 import AdminDashboard from "./AdminDashboard";
 import CompanyAdminDashboard from "./CompanyAdminDashboard";
+import OwnerDashboard from "./OwnerDashboard";
 
 class Dashboard extends React.Component {
   render() {
@@ -18,6 +19,9 @@ class Dashboard extends React.Component {
         )}
         {hasRole(user?.roles as RoleInterface[], ROLES.COMPANY_ADMIN) && (
           <CompanyAdminDashboard />
+        )}
+        {hasRole(user?.roles as RoleInterface[], ROLES.OWNER) && (
+          <OwnerDashboard />
         )}
         {/* <GooglePlacesAutoComplete
           isMarkerShown

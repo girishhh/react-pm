@@ -23,6 +23,7 @@ export interface RestaurentStoreState {
 export interface RestaurentListReqPayLoad {
   start: number;
   limit: number;
+  conditions: string;
 }
 
 export interface RestaurentDetailsPayload {

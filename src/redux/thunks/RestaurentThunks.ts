@@ -16,7 +16,8 @@ export function fetchRestaurentList(payload: RestaurentListReqPayLoad) {
       dispatch({ type: "restaurents/list/loading" });
       const data = await RestaurentService.fetchRestaurentList(
         payload.start,
-        payload.limit
+        payload.limit,
+        payload.conditions
       );
       dispatch({
         type: "restaurents/list/data",

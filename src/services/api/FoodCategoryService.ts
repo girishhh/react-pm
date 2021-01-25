@@ -12,13 +12,14 @@ import APIParamsBuilderHelper from "../../utils/helpers/APIParamsBuilderHelper";
 class FoodCategoryService {
   static async fetchFoodCategoryList(
     start: number,
-    limit: number
+    limit: number,
+    conditions: string
   ): Promise<FoodCategoryListResp> {
     const requestConfig = new APIParamsBuilderHelper(
       FoodCategoryConstants.FOOD_CATEGORY_LIST_API,
       HTTP_METHODS.GET
     )
-      .addQueryParams({ start, limit })
+      .addQueryParams({ start, limit, conditions })
       .build().getConfig;
 
     const result = await APIHelper.sendRequest<FoodCategoryListResp>(

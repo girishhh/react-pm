@@ -12,6 +12,9 @@ import {
 } from "../../interfaces/RestaurentInterface";
 import { fetchRestaurentList } from "../../redux/thunks/RestaurentThunks";
 import { API_STATE, TABLE_CONSTANTS } from "../../utils/constants/common";
+import { ROLES } from "../../utils/constants/RoleConstants";
+import { getUser } from "../../utils/helpers/AuthHelper";
+import { hasRole } from "../../utils/helpers/CommonHelper";
 import ApiError from "../common/ApiErrors";
 import { CommonTable } from "../common/CommonTable";
 import secureDomain from "../hoc/SecureDomain";
@@ -23,7 +26,7 @@ interface RestaurentProps extends LocationProps {
   restaurentList: RestaurentInterface[];
   restaurentListError: null | AxiosError;
   restaurentListState: string;
-  fetchRestaurentList(start: number, limit: number): void;
+  fetchRestaurentList(start: number, limit: number, conditions: string): void;
   restaurentListTotal: number;
 }
 
@@ -43,9 +46,9 @@ const mapDispatchToProps = (
   dispatch: Dispatch<RestaurentAction> | ThunkDispatch<{}, {}, any>
 ) => {
   return {
-    fetchRestaurentList: (start: number, limit: number) => {
+    fetchRestaurentList: (start: number, limit: number, conditions: string) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(fetchRestaurentList({ start, limit }));
+      thunkDispatch(fetchRestaurentList({ start, limit, conditions }));
     },
   };
 };
@@ -116,6 +119,12 @@ const RestaurentList: React.FC<RestaurentProps> = ({
     setPageCount(totalPages);
   }, [restaurentListTotal]);
 
+  const getFetchCondition = (): string => {
+    const user = getUser();
+    const isOwner = hasRole(user?.roles, ROLES.OWNER);
+    return isOwner ? JSON.stringify({ _id: { in: user?.restaurents } }) : "";
+  };
+
   return (
     <div className="restaurent-list d-flex">
       <Row className="w-100 justify-content-start pl-1">
@@ -127,6 +136,7 @@ const RestaurentList: React.FC<RestaurentProps> = ({
             columns={columns}
             data={data}
             fetchData={fetchRestaurentList}
+            fetchCondition={getFetchCondition()}
             loading={restaurentListState === API_STATE.LOADING}
             pageCount={pageCount}
             changePageCount={changePageCount}

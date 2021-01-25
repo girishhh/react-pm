@@ -16,7 +16,8 @@ export function fetchFoodCategoryList(payload: FoodCategoryListReqPayLoad) {
       dispatch({ type: "food-categories/list/loading" });
       const data = await FoodCategoryService.fetchFoodCategoryList(
         payload.start,
-        payload.limit
+        payload.limit,
+        payload.conditions
       );
       dispatch({
         type: "food-categories/list/data",

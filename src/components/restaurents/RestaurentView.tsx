@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import React, { Dispatch } from "react";
 import { Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import { LocationProps } from "../../interfaces/CommonInterface";
 import {
@@ -61,13 +62,15 @@ class RestaurentView extends React.Component<Props> {
       restaurentDetailsLoadingState,
       restaurentDetails,
       restaurentDetailsError,
-      location,
     } = this.props;
-    const viewAction = new URLSearchParams(location.search).get("viewAction");
     const currentUser = getUser();
     const canViewRestaurent = currentUser?.permissions.includes(
       "viewRestaurent"
     );
+    const canViewFoodItemList = currentUser?.permissions.includes(
+      "viewFoodItemList"
+    );
+    const { restaurentId } = this.props.match.params as any;
 
     return (
       <div className="restaurent-list">
@@ -80,29 +83,36 @@ class RestaurentView extends React.Component<Props> {
           <ApiError errors={formatResponseErrors(restaurentDetailsError)} />
         )}
 
-        {restaurentDetailsLoadingState === API_STATE.DONE && (
-          <>
-            {viewAction === ViewActionTypes.VIEW &&
-              canViewRestaurent &&
-              restaurentDetails && (
-                <Row className="w-100 justify-content-start pl-5">
-                  <Row className="w-100">RestaurentName</Row>
-                  <Row className="w-100">{restaurentDetails.name}</Row>
+        {restaurentDetailsLoadingState === API_STATE.DONE &&
+          canViewRestaurent &&
+          restaurentDetails && (
+            <div className="pl-5">
+              <Row className="w-100 justify-content-start">
+                <Row className="w-100">RestaurentName</Row>
+                <Row className="w-100">{restaurentDetails.name}</Row>
 
-                  <Row className="w-100 pt-3">Latitude</Row>
-                  <Row className="w-100">{restaurentDetails.lat}</Row>
+                <Row className="w-100 pt-3">Latitude</Row>
+                <Row className="w-100">{restaurentDetails.lat}</Row>
 
-                  <Row className="w-100 pt-3">Longitude</Row>
-                  <Row className="w-100">{restaurentDetails.lng}</Row>
+                <Row className="w-100 pt-3">Longitude</Row>
+                <Row className="w-100">{restaurentDetails.lng}</Row>
 
-                  <Row className="w-100 pt-3">Geo Location</Row>
-                  <Row className="w-100">
-                    {restaurentDetails.geo_location_description}
-                  </Row>
+                <Row className="w-100 pt-3">Geo Location</Row>
+                <Row className="w-100">
+                  {restaurentDetails.geo_location_description}
                 </Row>
-              )}
-          </>
-        )}
+              </Row>
+              <Row className="w-100 justify-content-start">
+                {canViewFoodItemList && (
+                  <Row className="pt-3">
+                    <NavLink to={`/restaurents/${restaurentId}/food-items`}>
+                      View FoodItems
+                    </NavLink>
+                  </Row>
+                )}
+              </Row>
+            </div>
+          )}
       </div>
     );
   }

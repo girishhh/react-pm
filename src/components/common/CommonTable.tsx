@@ -1,18 +1,32 @@
-// @ts-nocheck
-import React, { useEffect } from "react";
-import { usePagination, useTable } from "react-table";
-import BTable from "react-bootstrap/Table";
+import React, { ReactElement, useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";
+import BTable from "react-bootstrap/Table";
+import { usePagination, useTable } from "react-table";
 import "./CommonTable.scss";
 
-export function CommonTable({
-  columns,
-  data,
-  fetchData,
-  loading,
-  pageCount: controlledPageCount,
-  changePageCount,
-}) {
+interface Props<D> {
+  columns: any[];
+  data: D[];
+  fetchData(start: number, limit: number, conditions: string): void;
+  fetchCondition: string;
+  loading: boolean;
+  pageCount: number;
+  changePageCount(pageSize: number): void;
+}
+
+export const CommonTable = <D extends object>(
+  props: Props<D>
+): ReactElement => {
+  const {
+    columns,
+    data,
+    fetchData,
+    fetchCondition = "",
+    loading,
+    pageCount: controlledPageCount,
+    changePageCount,
+  } = props;
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -28,7 +42,7 @@ export function CommonTable({
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
-  } = useTable(
+  } = useTable<D>(
     {
       columns,
       data,
@@ -40,7 +54,11 @@ export function CommonTable({
   );
 
   useEffect(() => {
-    fetchData(pageIndex * pageSize, pageSize);
+    if (fetchCondition) {
+      fetchData(pageIndex * pageSize, pageSize, fetchCondition);
+    } else {
+      fetchData(pageIndex * pageSize, pageSize, "");
+    }
   }, [pageIndex, pageSize]);
 
   return (
@@ -169,4 +187,4 @@ export function CommonTable({
       </div>
     </>
   );
-}
+};

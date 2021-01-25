@@ -122,6 +122,7 @@ const CompanyList: React.FC<CompanyProps> = ({
           <CommonTable
             columns={columns}
             data={data}
+            fetchCondition=""
             fetchData={fetchCompanyList}
             loading={companyListState === API_STATE.LOADING}
             pageCount={pageCount}

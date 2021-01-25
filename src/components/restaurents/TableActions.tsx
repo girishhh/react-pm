@@ -12,7 +12,11 @@ import {
 import { deleteRestaurent } from "../../redux/thunks/RestaurentThunks";
 import { API_STATE } from "../../utils/constants/common";
 import { ROLES } from "../../utils/constants/RoleConstants";
-import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
+import { getUser } from "../../utils/helpers/AuthHelper";
+import {
+  formatResponseErrors,
+  hasRole,
+} from "../../utils/helpers/CommonHelper";
 import CommonModal from "../common/CommonModal";
 import secureDomain from "../hoc/SecureDomain";
 
@@ -60,35 +64,49 @@ const TableActions: React.FC<Props> = ({
 
   return (
     <>
-      <CommonModal
-        onConfirm={onConfirm}
-        hideDialog={hideDialog}
-        title="Delete Restaurent"
-        body="Are you sure you want to delete this?"
-        confirmText="Delete"
-        show={showDialog}
-        loading={restaurentDeleteLoadingState === API_STATE.LOADING}
-        errors={formatResponseErrors(restaurentDeleteError)}
-      />
-      <NavLink
-        to={`/restaurents/view/${restaurentId}?viewAction=view`}
-        className="pr-2"
-      >
-        view
-      </NavLink>
-      <NavLink to={`/restaurents/edit/${restaurentId}`}>edit</NavLink>
-      <Button
-        variant="link"
-        className="delete-btn"
-        onClick={() => setShowDialog(true)}
-      >
-        <span>delete</span>
-      </Button>
-      <NavLink
-        to={`/users/create?role=${ROLES.OWNER}&&restaurentId=${restaurentId}`}
-      >
-        addOwner
-      </NavLink>
+      {getUser()?.permissions.includes("deleteRestaurent") && (
+        <CommonModal
+          onConfirm={onConfirm}
+          hideDialog={hideDialog}
+          title="Delete Restaurent"
+          body="Are you sure you want to delete this?"
+          confirmText="Delete"
+          show={showDialog}
+          loading={restaurentDeleteLoadingState === API_STATE.LOADING}
+          errors={formatResponseErrors(restaurentDeleteError)}
+        />
+      )}
+
+      {getUser()?.permissions.includes("viewRestaurent") && (
+        <NavLink
+          to={`/restaurents/view/${restaurentId}?viewAction=view`}
+          className="pr-2"
+        >
+          view
+        </NavLink>
+      )}
+
+      {getUser()?.permissions.includes("editRestaurent") && (
+        <NavLink to={`/restaurents/edit/${restaurentId}`}>edit</NavLink>
+      )}
+
+      {getUser()?.permissions.includes("deleteRestaurent") && (
+        <Button
+          variant="link"
+          className="delete-btn"
+          onClick={() => setShowDialog(true)}
+        >
+          <span>delete</span>
+        </Button>
+      )}
+
+      {getUser()?.permissions.includes("createOwner") && (
+        <NavLink
+          to={`/users/create?role=${ROLES.OWNER}&&restaurentId=${restaurentId}`}
+        >
+          addOwner
+        </NavLink>
+      )}
     </>
   );
 };

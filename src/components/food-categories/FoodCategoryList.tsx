@@ -23,7 +23,7 @@ interface FoodCategoryProps extends LocationProps {
   foodCategoryList: FoodCategoryInterface[];
   foodCategoryListError: null | AxiosError;
   foodCategoryListState: string;
-  fetchFoodCategoryList(start: number, limit: number): void;
+  fetchFoodCategoryList(start: number, limit: number, conditions: string): void;
   foodCategoryListTotal: number;
 }
 
@@ -44,9 +44,13 @@ const mapDispatchToProps = (
   dispatch: Dispatch<FoodCategoryAction> | ThunkDispatch<{}, {}, any>
 ) => {
   return {
-    fetchFoodCategoryList: (start: number, limit: number) => {
+    fetchFoodCategoryList: (
+      start: number,
+      limit: number,
+      conditions: string
+    ) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(fetchFoodCategoryList({ start, limit }));
+      thunkDispatch(fetchFoodCategoryList({ start, limit, conditions }));
     },
   };
 };
@@ -116,6 +120,7 @@ const FoodCategoryList: React.FC<FoodCategoryProps> = ({
           <CommonTable
             columns={columns}
             data={data}
+            fetchCondition={""}
             fetchData={fetchFoodCategoryList}
             loading={foodCategoryListState === API_STATE.LOADING}
             pageCount={pageCount}

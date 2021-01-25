@@ -186,8 +186,6 @@ class RestaurentCreate extends React.Component<Props, State> {
       geo: RenderGooglePlaces,
     };
 
-    console.log("STATE FORM", this.state.formData);
-
     return (
       <div className="restaurent-create">
         {this.isLoading() && (

@@ -13,12 +13,13 @@ export interface FoodCategoryStoreState {
 export interface FoodCategoryInterface {
   _id: string;
   name: string;
-  company: CompanyInterface;
+  company: CompanyInterface | string;
 }
 
 export interface FoodCategoryListReqPayLoad {
   start: number;
   limit: number;
+  conditions: string;
 }
 
 export interface FoodCategoryDetailsPayload {

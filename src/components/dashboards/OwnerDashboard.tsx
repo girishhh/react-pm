@@ -13,14 +13,6 @@ class OwnerDashboard extends React.Component {
         <Col className="text-center">
           <NavLink to="/restaurents">Restaurents</NavLink>
         </Col>
-        <Col className="text-center">
-          <NavLink to={`/users/create/?role=${ROLES.DELIVERY_BOY}`}>
-            DeliveryBoy List
-          </NavLink>
-        </Col>
-        <Col className="text-center">
-          <NavLink to={`/food-categories`}>FoodCategories</NavLink>
-        </Col>
       </Row>
     );
   }

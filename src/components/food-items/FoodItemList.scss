@@ -1,0 +1,8 @@
+.food-item-list {
+  .delete-btn {
+    vertical-align: initial;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}

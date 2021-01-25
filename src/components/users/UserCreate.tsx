@@ -150,7 +150,11 @@ class UserCreate extends React.Component<Props, State> {
         {userCreateRespData && userCreateRespData.message && (
           <Row className="success-msg">{userCreateRespData.message}</Row>
         )}
-        {this.isLoading() && <Spinner animation="border" />}
+        {this.isLoading() && (
+          <Row className="d-flex justify-content-center pt-2">
+            <Spinner animation="border" />
+          </Row>
+        )}
         {this.isError() && <ApiError errors={formatResponseErrors(error)} />}
         {!this.isLoading() && (
           <>

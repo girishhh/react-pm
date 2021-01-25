@@ -66,7 +66,6 @@ class ActivateAccount extends React.Component<Props> {
     this.type = "";
   }
   componentDidMount(): void {
-    const urlSearchParam = new URLSearchParams(this.props.location.search);
     if (this.type === UserActivationConstants.CONFIRMATION)
       this.props.activateAccount({ token: this.token }, this.type);
   }
