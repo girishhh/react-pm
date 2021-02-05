@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import React, { Dispatch, useEffect, useMemo } from "react";
+import React, { CSSProperties, Dispatch, useEffect, useMemo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { CellValue } from "react-table";
@@ -17,6 +17,7 @@ import { getUser } from "../../utils/helpers/AuthHelper";
 import { hasRole } from "../../utils/helpers/CommonHelper";
 import ApiError from "../common/ApiErrors";
 import { CommonTable } from "../common/CommonTable";
+import GridInfiniteLoader from "../common/GridInfiniteLoader";
 import secureDomain from "../hoc/SecureDomain";
 import "./RestaurentList.scss";
 import RestaurentListHeader from "./RestaurentListHeader";
@@ -125,6 +126,20 @@ const RestaurentList: React.FC<RestaurentProps> = ({
     return isOwner ? JSON.stringify({ _id: { in: user?.restaurents } }) : "";
   };
 
+  const cellData = (
+    list: RestaurentInterface[],
+    row: number,
+    col: number,
+    colCount: number,
+    style: CSSProperties
+  ) => {
+    return (
+      <div style={{ ...style, padding: "20px" }}>
+        {list && list[row * colCount + col] && list[row * colCount + col].name}
+      </div>
+    );
+  };
+
   return (
     <div className="restaurent-list d-flex">
       <Row className="w-100 justify-content-start pl-1">
@@ -141,6 +156,16 @@ const RestaurentList: React.FC<RestaurentProps> = ({
             pageCount={pageCount}
             changePageCount={changePageCount}
           />
+          {/* <Row className="pt-5">
+            <GridInfiniteLoader
+              listData={restaurentList}
+              isLoading={restaurentListState === API_STATE.LOADING}
+              columnCount={3}
+              cellData={cellData}
+              fetchList={fetchRestaurentList}
+              fetchConditon=""
+            />
+          </Row> */}
         </Col>
       </Row>
     </div>
