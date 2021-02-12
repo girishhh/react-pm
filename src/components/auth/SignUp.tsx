@@ -55,6 +55,7 @@ const mapDispatchToProps = (
 class SignUp extends React.Component<Props> {
   onSubmit = (event: ISubmitEvent<any>) => {
     const formData = event.formData;
+    formData.roles = [ROLES.CUSTOMER];
     if (isAdminDomain()) formData.roles = [ROLES.ADMIN];
     this.props.signUp(formData);
   };

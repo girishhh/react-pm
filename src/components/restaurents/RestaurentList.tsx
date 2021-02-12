@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
+import lodash from "lodash";
 import React, { CSSProperties, Dispatch, useEffect, useMemo } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { CellValue } from "react-table";
 import { ThunkDispatch } from "redux-thunk";
@@ -131,41 +132,59 @@ const RestaurentList: React.FC<RestaurentProps> = ({
     row: number,
     col: number,
     colCount: number,
-    style: CSSProperties
+    style: CSSProperties,
+    totalRecords: number
   ) => {
+    const cellIndex = row * colCount + col;
+    if (list && cellIndex > totalRecords - 1) return <></>;
+    const restaurentData = list && list[row * colCount + col];
     return (
-      <div style={{ ...style, padding: "20px" }}>
-        {list && list[row * colCount + col] && list[row * colCount + col].name}
+      <div style={{ ...style, padding: "40px" }}>
+        <Card style={{ minHeight: "100px" }}>
+          <Card.Body>
+            <Card.Title>{restaurentData && restaurentData.name}</Card.Title>
+            <Card.Text>
+              <span>{restaurentData && restaurentData.name}</span>
+            </Card.Text>
+          </Card.Body>
+        </Card>
       </div>
     );
   };
 
+  const user = getUser();
+
   return (
     <div className="restaurent-list d-flex">
-      <Row className="w-100 justify-content-start pl-1">
-        <Col md="9">
+      <Row className="w-100 mx-0">
+        <Col>
           {restaurentListState === API_STATE.ERROR && (
             <ApiError errors={[restaurentListError?.response?.data.message]} />
           )}
-          <CommonTable
-            columns={columns}
-            data={data}
-            fetchData={fetchRestaurentList}
-            fetchCondition={getFetchCondition()}
-            loading={restaurentListState === API_STATE.LOADING}
-            pageCount={pageCount}
-            changePageCount={changePageCount}
-          />
-          {/* <Row className="pt-5">
+          {(hasRole(user?.roles, ROLES.COMPANY_ADMIN) ||
+            hasRole(user?.roles, ROLES.OWNER)) && (
+            <CommonTable
+              columns={columns}
+              data={data}
+              fetchData={fetchRestaurentList}
+              fetchCondition={getFetchCondition()}
+              loading={restaurentListState === API_STATE.LOADING}
+              pageCount={pageCount}
+              changePageCount={changePageCount}
+            />
+          )}
+
+          {hasRole(user?.roles, ROLES.CUSTOMER) && (
             <GridInfiniteLoader
               listData={restaurentList}
               isLoading={restaurentListState === API_STATE.LOADING}
               columnCount={3}
               cellData={cellData}
               fetchList={fetchRestaurentList}
+              totalRecords={restaurentListTotal}
               fetchConditon=""
             />
-          </Row> */}
+          )}
         </Col>
       </Row>
     </div>

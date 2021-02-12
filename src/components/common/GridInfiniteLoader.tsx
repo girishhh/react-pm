@@ -29,8 +29,10 @@ interface Props {
     row: number,
     col: number,
     colCount: number,
-    style: CSSProperties
+    style: CSSProperties,
+    totalRecords: number
   ) => JSX.Element;
+  totalRecords: number;
 }
 
 class GridInfiniteLoader extends React.Component<
@@ -88,7 +90,8 @@ class GridInfiniteLoader extends React.Component<
           rowIndex,
           columnIndex,
           this.props.columnCount,
-          style
+          style,
+          this.props.totalRecords
         )}
       </CellMeasurer>
     );

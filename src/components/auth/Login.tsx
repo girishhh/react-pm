@@ -19,10 +19,12 @@ import { AxiosError } from "axios";
 import ApiError from "../common/ApiErrors";
 import {
   formatResponseErrors,
+  hasRole,
   isAdminDomain,
 } from "../../utils/helpers/CommonHelper";
 import { ROLES } from "../../utils/constants/RoleConstants";
 import { NavLink } from "react-router-dom";
+import { getUser } from "../../utils/helpers/AuthHelper";
 
 const mapStateToProps = (state: { loginReducer: LoginStoreState }) => {
   const { login } = state.loginReducer;
@@ -65,7 +67,12 @@ class Login extends React.Component<LoginProps> {
   componentDidUpdate(): void {
     const { session, history } = this.props;
     if (session && session.accessToken) {
-      history.push("/dashboard");
+      const user = getUser();
+      if (hasRole(user?.roles, ROLES.CUSTOMER)) {
+        history.push("/restaurents");
+      } else {
+        history.push("/dashboard");
+      }
     }
   }
 

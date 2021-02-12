@@ -118,7 +118,7 @@ const FoodItemList: React.FC<FoodItemProps> = ({
   return (
     <div className="food-item-list d-flex">
       <Row className="w-100 justify-content-start pl-1">
-        <Col md="9">
+        <Col>
           {foodItemListState === API_STATE.ERROR && (
             <ApiError errors={[foodItemListError?.response?.data.message]} />
           )}
