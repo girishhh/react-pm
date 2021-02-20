@@ -71,13 +71,13 @@ const TableActions: React.FC<Props> = ({
         errors={formatResponseErrors(foodItemDeleteError)}
       />
       <NavLink
-        to={`/restaurents/${restaurentId}/food-items/view/${foodItemId}`}
+        to={`/restaurents/${restaurentId}/food-items/${foodItemId}/view`}
         className="pr-2"
       >
         view
       </NavLink>
       <NavLink
-        to={`/restaurents/${restaurentId}/food-items/edit/${foodItemId}`}
+        to={`/restaurents/${restaurentId}/food-items/${foodItemId}/edit`}
       >
         edit
       </NavLink>

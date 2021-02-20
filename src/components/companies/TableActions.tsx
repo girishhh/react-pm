@@ -69,12 +69,12 @@ const TableActions: React.FC<Props> = ({
         errors={formatResponseErrors(companyDeleteError)}
       />
       <NavLink
-        to={`/companies/view/${companyId}?viewAction=view`}
+        to={`/companies/${companyId}/view?viewAction=view`}
         className="pr-2"
       >
         view
       </NavLink>
-      <NavLink to={`/companies/view/${companyId}?viewAction=edit`}>
+      <NavLink to={`/companies/${companyId}/view?viewAction=edit`}>
         edit
       </NavLink>
       <Button

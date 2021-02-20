@@ -6,54 +6,54 @@ import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import {
-  FoodCategoryStoreState,
-  FoodCategoryAction,
-} from "../../interfaces/FoodCategoryInterface";
-import { deleteFoodCategory } from "../../redux/thunks/FoodThunks";
+  MenuItemStoreState,
+  MenuItemAction,
+} from "../../interfaces/MenuItemInterface";
+import { deleteMenuItem } from "../../redux/thunks/MenuItemThunks";
 import { API_STATE } from "../../utils/constants/common";
 import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
 import CommonModal from "../common/CommonModal";
 import secureDomain from "../hoc/SecureDomain";
 
 interface Props {
-  foodCategoryId: string;
-  foodCategoryDeleteError: null | AxiosError;
-  foodCategoryDeleteLoadingState: string;
+  menuItemId: string;
+  restaurentId: string;
+  menuItemDeleteError: null | AxiosError;
+  menuItemDeleteLoadingState: string;
   history: H.History;
-  deleteFoodCategory(_id: string, history: H.History): void;
+  deleteMenuItem(_id: string, history: H.History): void;
 }
 
-const mapStateToProps = (state: {
-  foodCategoryReducer: FoodCategoryStoreState;
-}) => {
-  const { foodCategoryDelete } = state.foodCategoryReducer;
+const mapStateToProps = (state: { menuItemReducer: MenuItemStoreState }) => {
+  const { menuItemDelete } = state.menuItemReducer;
   return {
-    foodCategoryDeleteError: foodCategoryDelete.error,
-    foodCategoryDeleteLoadingState: foodCategoryDelete.state,
+    menuItemDeleteError: menuItemDelete.error,
+    menuItemDeleteLoadingState: menuItemDelete.state,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: Dispatch<FoodCategoryAction> | ThunkDispatch<{}, {}, any>
+  dispatch: Dispatch<MenuItemAction> | ThunkDispatch<{}, {}, any>
 ) => {
   return {
-    deleteFoodCategory: (_id: string, history: H.History) => {
+    deleteMenuItem: (_id: string, history: H.History) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(deleteFoodCategory(_id, history));
+      thunkDispatch(deleteMenuItem(_id, history));
     },
   };
 };
 
 const TableActions: React.FC<Props> = ({
-  foodCategoryId,
-  foodCategoryDeleteLoadingState,
-  foodCategoryDeleteError,
+  restaurentId,
+  menuItemId,
+  menuItemDeleteLoadingState,
+  menuItemDeleteError,
   history,
-  deleteFoodCategory,
+  deleteMenuItem,
 }) => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const onConfirm = () => {
-    deleteFoodCategory(foodCategoryId, history);
+    deleteMenuItem(menuItemId, history);
   };
   const hideDialog = () => setShowDialog(false);
 
@@ -62,14 +62,18 @@ const TableActions: React.FC<Props> = ({
       <CommonModal
         onConfirm={onConfirm}
         hideDialog={hideDialog}
-        title="Delete FoodCategory"
+        title="Delete MenuItem"
         body="Are you sure you want to delete this?"
         confirmText="Delete"
         show={showDialog}
-        loading={foodCategoryDeleteLoadingState === API_STATE.LOADING}
-        errors={formatResponseErrors(foodCategoryDeleteError)}
+        loading={menuItemDeleteLoadingState === API_STATE.LOADING}
+        errors={formatResponseErrors(menuItemDeleteError)}
       />
-      <NavLink to={`/food-categories/${foodCategoryId}/edit`}>edit</NavLink>
+      <NavLink
+        to={`/restaurents/${restaurentId}/menu-items/${menuItemId}/edit`}
+      >
+        edit
+      </NavLink>
       <Button
         variant="link"
         className="delete-btn"

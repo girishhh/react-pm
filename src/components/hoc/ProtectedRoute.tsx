@@ -9,7 +9,7 @@ import { isLoggedIn } from "../../utils/helpers/AuthHelper";
 import AuthLayout from "../layout/AuthLayout";
 import DefaultLayout from "../layout/DefaultLayout";
 
-const ProtectedRoute: React.SFC<RouteProps> = ({
+const ProtectedRoute: React.FC<RouteProps> = ({
   component: Component,
   ...rest
 }) => {
@@ -19,7 +19,7 @@ const ProtectedRoute: React.SFC<RouteProps> = ({
   return (
     <Route
       {...rest}
-      render={(props: RouteComponentProps<{}>) =>
+      render={(props: RouteComponentProps) =>
         isLoggedIn() ? (
           <DefaultLayout>
             <Component {...props} />

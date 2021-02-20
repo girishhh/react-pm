@@ -79,7 +79,7 @@ const TableActions: React.FC<Props> = ({
 
       {getUser()?.permissions.includes("viewRestaurent") && (
         <NavLink
-          to={`/restaurents/view/${restaurentId}?viewAction=view`}
+          to={`/restaurents/${restaurentId}/view?viewAction=view`}
           className="pr-2"
         >
           view
@@ -87,7 +87,7 @@ const TableActions: React.FC<Props> = ({
       )}
 
       {getUser()?.permissions.includes("editRestaurent") && (
-        <NavLink to={`/restaurents/edit/${restaurentId}`}>edit</NavLink>
+        <NavLink to={`/restaurents/${restaurentId}/edit`}>edit</NavLink>
       )}
 
       {getUser()?.permissions.includes("deleteRestaurent") && (

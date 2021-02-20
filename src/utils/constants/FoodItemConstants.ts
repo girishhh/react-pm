@@ -9,4 +9,6 @@ export enum FoodTypes {
   NON_VEG = "nonVeg",
 }
 
-export const EDIT_PATH = new RegExp("^/restaurents/(.){24}/food-items/edit");
+export const EDIT_PATH = new RegExp(
+  "^/restaurents/(.){24}/food-items/(.){24}/edit"
+);

@@ -19,6 +19,8 @@ import FoodItemList from "./components/food-items/FoodItemList";
 import FoodItemView from "./components/food-items/FoodItemView";
 import AuthRoute from "./components/hoc/AuthRoutes";
 import ProtectedRoute from "./components/hoc/ProtectedRoute";
+import MenuItemCreate from "./components/menu-items/MenuItemCreate";
+import MenuItemList from "./components/menu-items/MenuItemList";
 import RestaurentCreate from "./components/restaurents/RestaurentCreate";
 import RestaurentList from "./components/restaurents/RestaurentList";
 import RestaurentView from "./components/restaurents/RestaurentView";
@@ -28,100 +30,119 @@ class AppComponent extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        <>
-          <Switch>
-            {/* <ProtectedRoute exact path="/admins" component={AdminDashboard} /> */}
-            <AuthRoute exact path="/login" component={Login} />
-            <AuthRoute exact path="/signOut" component={SignOut} />
-            <AuthRoute exact path="/signUp" component={SignUp} />
-            <AuthRoute
-              exact
-              path="/users/activate-account"
-              component={ActivateAccount}
-            />
-            <AuthRoute
-              exact
-              path="/users/resend-confirmation"
-              component={ReSendConfirmation}
-            />
+        <Switch>
+          {/* <ProtectedRoute exact path="/admins" component={AdminDashboard} /> */}
+          <AuthRoute exact path="/login" component={Login} />
+          <AuthRoute exact path="/signOut" component={SignOut} />
+          <AuthRoute exact path="/signUp" component={SignUp} />
+          <AuthRoute
+            exact
+            path="/users/activate-account"
+            component={ActivateAccount}
+          />
+          <AuthRoute
+            exact
+            path="/users/resend-confirmation"
+            component={ReSendConfirmation}
+          />
 
-            <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-            <ProtectedRoute exact path="/users/create" component={UserCreate} />
+          <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+          <ProtectedRoute exact path="/users/create" component={UserCreate} />
 
-            <ProtectedRoute exact path="/companies" component={CompanyList} />
-            <ProtectedRoute
-              exact
-              path="/companies/view/:companyId"
-              component={CompanyView}
-            />
-            <ProtectedRoute
-              exact
-              path="/companies/create"
-              component={CompanyCreate}
-            />
+          <ProtectedRoute exact path="/companies" component={CompanyList} />
+          <ProtectedRoute
+            exact
+            path="/companies/:companyId/view"
+            component={CompanyView}
+          />
+          <ProtectedRoute
+            exact
+            path="/companies/create"
+            component={CompanyCreate}
+          />
 
-            <ProtectedRoute
-              exact
-              path="/restaurents"
-              component={RestaurentList}
-            />
-            <ProtectedRoute
-              exact
-              path="/restaurents/view/:restaurentId"
-              component={RestaurentView}
-            />
-            <ProtectedRoute
-              exact
-              path="/restaurents/create"
-              component={RestaurentCreate}
-            />
-            <ProtectedRoute
-              exact
-              path="/restaurents/edit/:restaurentId"
-              component={RestaurentCreate}
-            />
+          <ProtectedRoute
+            exact
+            path="/restaurents"
+            component={RestaurentList}
+          />
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/view"
+            component={RestaurentView}
+          />
+          <ProtectedRoute
+            exact
+            path="/restaurents/create"
+            component={RestaurentCreate}
+          />
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/edit"
+            component={RestaurentCreate}
+          />
 
-            <ProtectedRoute
-              exact
-              path="/food-categories"
-              component={FoodCategoryList}
-            />
-            <ProtectedRoute
-              exact
-              path="/food-categories/create"
-              component={FoodCategoryCreate}
-            />
-            <ProtectedRoute
-              exact
-              path="/food-categories/edit/:foodCategoryId"
-              component={FoodCategoryCreate}
-            />
+          <ProtectedRoute
+            exact
+            path="/food-categories"
+            component={FoodCategoryList}
+          />
+          <ProtectedRoute
+            exact
+            path="/food-categories/create"
+            component={FoodCategoryCreate}
+          />
+          <ProtectedRoute
+            exact
+            path="/food-categories/:foodCategoryId/edit"
+            component={FoodCategoryCreate}
+          />
 
-            <ProtectedRoute
-              exact
-              path="/restaurents/:restaurentId/food-items"
-              component={FoodItemList}
-            />
-            <ProtectedRoute
-              exact
-              path="/restaurents/:restaurentId/food-items/view/:foodItemId"
-              component={FoodItemView}
-            />
-            <ProtectedRoute
-              exact
-              path="/restaurents/:restaurentId/food-items/create"
-              component={FoodItemCreate}
-            />
-            <ProtectedRoute
-              exact
-              path="/restaurents/:restaurentId/food-items/edit/:foodItemId"
-              component={FoodItemCreate}
-            />
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/food-items"
+            component={FoodItemList}
+          />
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/food-items/:foodItemId/view"
+            component={FoodItemView}
+          />
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/food-items/create"
+            component={FoodItemCreate}
+          />
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/food-items/:foodItemId/edit"
+            component={FoodItemCreate}
+          />
 
-            <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
-            <Route path="*" component={NotFound} />
-          </Switch>
-        </>
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/menu-items"
+            component={MenuItemList}
+          />
+          {/* <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/menu-items/:menuItemId/view/"
+            component={MenuItemView}
+          /> */}
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/menu-items/create"
+            component={MenuItemCreate}
+          />
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/menu-items/:menuItemId/edit"
+            component={MenuItemCreate}
+          />
+
+          <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
+          <Route path="*" component={NotFound} />
+        </Switch>
       </BrowserRouter>
     );
   }

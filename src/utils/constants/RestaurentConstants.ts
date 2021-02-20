@@ -4,4 +4,4 @@ export enum RestaurentConstants {
   RESTAURENT_UPDATE_API = RESTAURENT_DETAILS_API,
 }
 
-export const EDIT_PATH = new RegExp("^/restaurents/edit");
+export const EDIT_PATH = new RegExp("^/restaurents/(.){24}/edit");
