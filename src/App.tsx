@@ -21,6 +21,7 @@ import AuthRoute from "./components/hoc/AuthRoutes";
 import ProtectedRoute from "./components/hoc/ProtectedRoute";
 import MenuItemCreate from "./components/menu-items/MenuItemCreate";
 import MenuItemList from "./components/menu-items/MenuItemList";
+import MenuList from "./components/menus/MenuList";
 import RestaurentCreate from "./components/restaurents/RestaurentCreate";
 import RestaurentList from "./components/restaurents/RestaurentList";
 import RestaurentView from "./components/restaurents/RestaurentView";
@@ -124,11 +125,6 @@ class AppComponent extends React.Component {
             path="/restaurents/:restaurentId/menu-items"
             component={MenuItemList}
           />
-          {/* <ProtectedRoute
-            exact
-            path="/restaurents/:restaurentId/menu-items/:menuItemId/view/"
-            component={MenuItemView}
-          /> */}
           <ProtectedRoute
             exact
             path="/restaurents/:restaurentId/menu-items/create"
@@ -138,6 +134,12 @@ class AppComponent extends React.Component {
             exact
             path="/restaurents/:restaurentId/menu-items/:menuItemId/edit"
             component={MenuItemCreate}
+          />
+
+          <ProtectedRoute
+            exact
+            path="/restaurents/:restaurentId/menus"
+            component={MenuList}
           />
 
           <Route exact path="/" render={() => <Redirect to="/dashboard" />} />

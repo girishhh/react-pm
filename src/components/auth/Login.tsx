@@ -64,8 +64,8 @@ class Login extends React.Component<LoginProps> {
     this.props.login(loginData);
   };
 
-  componentDidUpdate(): void {
-    const { session, history } = this.props;
+  static getDerivedStateFromProps(nextProps: LoginProps) {
+    const { session, history } = nextProps;
     if (session && session.accessToken) {
       const user = getUser();
       if (hasRole(user?.roles, ROLES.CUSTOMER)) {
@@ -74,6 +74,7 @@ class Login extends React.Component<LoginProps> {
         history.push("/dashboard");
       }
     }
+    return null;
   }
 
   render() {

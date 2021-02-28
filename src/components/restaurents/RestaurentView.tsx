@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import React, { Dispatch } from "react";
+import { Col } from "react-bootstrap";
 import { Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -104,10 +105,22 @@ class RestaurentView extends React.Component<Props> {
               </Row>
               <Row className="w-100 justify-content-start">
                 {canViewFoodItemList && (
-                  <Row className="pt-3">
-                    <NavLink to={`/restaurents/${restaurentId}/food-items`}>
-                      View FoodItems
-                    </NavLink>
+                  <Row className="pt-3 w-100">
+                    <Col md="2" className="pl-0">
+                      <NavLink to={`/restaurents/${restaurentId}/food-items`}>
+                        View FoodItems
+                      </NavLink>
+                    </Col>
+                    <Col md="2" className="pl-0">
+                      <NavLink to={`/restaurents/${restaurentId}/menus`}>
+                        View Menus
+                      </NavLink>
+                    </Col>
+                    <Col md="2" className="pl-0">
+                      <NavLink to={`/restaurents/${restaurentId}/menu-items`}>
+                        View MenuItems
+                      </NavLink>
+                    </Col>
                   </Row>
                 )}
               </Row>

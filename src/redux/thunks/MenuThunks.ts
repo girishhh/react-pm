@@ -21,6 +21,7 @@ export function fetchMenuList(payload: MenuListReqPayLoad) {
         type: "menus/list/data",
         payload: data,
       });
+      return data?.menuList;
     } catch (error) {
       dispatch({ type: "menus/list/error", payload: error });
     }

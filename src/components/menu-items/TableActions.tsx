@@ -72,7 +72,7 @@ const TableActions: React.FC<Props> = ({
       <NavLink
         to={`/restaurents/${restaurentId}/menu-items/${menuItemId}/edit`}
       >
-        edit
+        view/edit
       </NavLink>
       <Button
         variant="link"

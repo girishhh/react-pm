@@ -1,5 +1,5 @@
+//@ts-nocheck
 import { AxiosError } from "axios";
-import lodash from "lodash";
 import React, { CSSProperties, Dispatch, useEffect, useMemo } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -28,7 +28,13 @@ interface RestaurentProps extends LocationProps {
   restaurentList: RestaurentInterface[];
   restaurentListError: null | AxiosError;
   restaurentListState: string;
-  fetchRestaurentList(start: number, limit: number, conditions: string): void;
+  fetchRestaurentList(
+    start: number,
+    limit: number,
+    conditions: string
+  ): (
+    dispatch: React.Dispatch<RestaurentAction>
+  ) => Promise<RestaurentInterface[]>;
   restaurentListTotal: number;
 }
 
@@ -48,9 +54,16 @@ const mapDispatchToProps = (
   dispatch: Dispatch<RestaurentAction> | ThunkDispatch<{}, {}, any>
 ) => {
   return {
-    fetchRestaurentList: (start: number, limit: number, conditions: string) => {
+    fetchRestaurentList: async (
+      start: number,
+      limit: number,
+      conditions: string
+    ) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(fetchRestaurentList({ start, limit, conditions }));
+      const restaurentList = await thunkDispatch(
+        fetchRestaurentList({ start, limit, conditions })
+      );
+      return restaurentList;
     },
   };
 };

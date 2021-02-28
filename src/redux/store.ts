@@ -9,6 +9,7 @@ import { activateAccountReducer } from "./reducers/auth/ActivateAccountReducer";
 import { foodCategoryReducer } from "./reducers/FoodCategoryReducer";
 import { foodItemReducer } from "./reducers/FoodItemReducer";
 import { menuItemReducer } from "./reducers/MenuItemReducer";
+import { menuReducer } from "./reducers/MenuReducer";
 
 const rootReducer = combineReducers({
   loginReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   foodCategoryReducer,
   foodItemReducer,
   menuItemReducer,
+  menuReducer,
 });
 
 export default createStore(rootReducer, applyMiddleware(thunk));

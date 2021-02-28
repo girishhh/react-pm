@@ -1,7 +1,6 @@
 import lodash from "lodash";
 import React, { CSSProperties } from "react";
 import { Spinner } from "react-bootstrap";
-import { connect } from "react-redux";
 import {
   AutoSizer,
   CellMeasurer,
@@ -21,8 +20,8 @@ import "./GridInfiniteLoader.scss";
 interface Props {
   listData: any[];
   isLoading: boolean;
-  fetchList(start: number, limit: number, conditions: string): void;
-  fetchConditon: "";
+  fetchList(start: number, limit: number, conditions: string): Promise<any[]>;
+  fetchConditon: string;
   columnCount: number;
   cellData: (
     list: any,
@@ -63,11 +62,20 @@ class GridInfiniteLoader extends React.Component<
   loadMoreRows = async (params: IndexRange) => {
     const { startIndex, stopIndex } = params;
     const endIndex = stopIndex + this.props.columnCount * 2;
-    this.props.fetchList(
+    const listData = await this.props.fetchList(
       startIndex * this.props.columnCount,
       endIndex - startIndex,
-      ""
+      this.props.fetchConditon
     );
+    if (!lodash.isEmpty(listData)) {
+      const existingList = this.state.listData;
+      for (let i = 0; i < listData.length; i++) {
+        existingList.push(listData[i]);
+      }
+      this.setState({
+        listData: existingList,
+      });
+    }
   };
 
   cellRenderer: GridCellRenderer = ({
@@ -107,21 +115,21 @@ class GridInfiniteLoader extends React.Component<
     });
   };
 
-  componentDidUpdate(prevProps: Props) {
-    if (
-      this.props.listData &&
-      !lodash.isEqual(prevProps.listData, this.props.listData)
-    ) {
-      const { listData } = this.props;
-      const existingList = this.state.listData;
-      for (let i = 0; i < listData.length; i++) {
-        existingList.push(listData[i]);
-      }
-      this.setState({
-        listData: existingList,
-      });
-    }
-  }
+  // componentDidUpdate(prevProps: Props) {
+  //   if (
+  //     this.props.listData &&
+  //     !lodash.isEqual(prevProps.listData, this.props.listData)
+  //   ) {
+  //     const { listData } = this.props;
+  //     const existingList = this.state.listData;
+  //     for (let i = 0; i < listData.length; i++) {
+  //       existingList.push(listData[i]);
+  //     }
+  //     this.setState({
+  //       listData: existingList,
+  //     });
+  //   }
+  // }
 
   render() {
     const rowCount = this.state.listData.length

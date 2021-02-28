@@ -23,6 +23,7 @@ export function fetchRestaurentList(payload: RestaurentListReqPayLoad) {
         type: "restaurents/list/data",
         payload: data,
       });
+      return data?.restaurentList;
     } catch (error) {
       dispatch({ type: "restaurents/list/error", payload: error });
     }
