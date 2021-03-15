@@ -1,8 +1,8 @@
-//@ts-nocheck
 import { AxiosError } from "axios";
 import React, { CSSProperties, Dispatch } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import { LocationProps } from "../../interfaces/CommonInterface";
 import {
@@ -12,7 +12,6 @@ import {
 } from "../../interfaces/MenuInterface";
 import { fetchMenuList } from "../../redux/thunks/MenuThunks";
 import { API_STATE } from "../../utils/constants/common";
-import { getUser } from "../../utils/helpers/AuthHelper";
 import ApiError from "../common/ApiErrors";
 import GridInfiniteLoader from "../common/GridInfiniteLoader";
 import secureDomain from "../hoc/SecureDomain";
@@ -26,7 +25,7 @@ interface MenuProps extends LocationProps {
     start: number,
     limit: number,
     conditions: string
-  ): (dispatch: React.Dispatch<MenuAction>) => Promise<MenuInterface[]>;
+  ): Promise<MenuInterface[]>;
   menuListTotal: number;
 }
 
@@ -49,7 +48,7 @@ const mapDispatchToProps = (
       const menuList = await thunkDispatch(
         fetchMenuList({ start, limit, conditions })
       );
-      return menuList;
+      return (menuList as unknown) as MenuInterface[];
     },
   };
 };
@@ -76,6 +75,13 @@ const MenuList: React.FC<MenuProps> = ({
     return (
       <div style={{ ...style, padding: "40px" }}>
         <Card style={{ minHeight: "100px" }}>
+          <Card.Header>
+            {menuData && (
+              <Link to={`menus/${menuData._id}/edit`} replace>
+                edit
+              </Link>
+            )}
+          </Card.Header>
           <Card.Body>
             <Card.Title>{menuData && menuData.name}</Card.Title>
             <Card.Text>
@@ -88,7 +94,6 @@ const MenuList: React.FC<MenuProps> = ({
   };
 
   const { restaurentId } = match.params as any;
-
   const conditions = { restaurent: { eq: restaurentId } };
 
   return (

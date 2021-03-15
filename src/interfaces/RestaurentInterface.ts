@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import { AddressInterface } from "./AddressInterface";
+import { MenuInterface } from "./MenuInterface";
 import { DefaultResponse } from "./StoreInterface";
 
 export interface RestaurentInterface {
@@ -7,6 +8,7 @@ export interface RestaurentInterface {
   name: string;
   address: AddressInterface;
   company: string;
+  activeMenu: MenuInterface;
   lat: number;
   lng: number;
   geo_location_description: string;

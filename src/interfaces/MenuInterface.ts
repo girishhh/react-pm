@@ -1,11 +1,13 @@
 import { AxiosResponse } from "axios";
 import { MenuItemInterface } from "./MenuItemInterface";
+import { RestaurentInterface } from "./RestaurentInterface";
 import { DefaultResponse } from "./StoreInterface";
 
 export interface MenuInterface {
   _id: string;
   name: string;
   menuItems: MenuItemInterface[];
+  restaurent: RestaurentInterface;
 }
 
 export interface MenuStoreState {
