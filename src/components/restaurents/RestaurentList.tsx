@@ -1,6 +1,11 @@
-//@ts-nocheck
 import { AxiosError } from "axios";
-import React, { CSSProperties, Dispatch, useEffect, useMemo } from "react";
+import React, {
+  CSSProperties,
+  Dispatch,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { CellValue } from "react-table";
@@ -32,9 +37,7 @@ interface RestaurentProps extends LocationProps {
     start: number,
     limit: number,
     conditions: string
-  ): (
-    dispatch: React.Dispatch<RestaurentAction>
-  ) => Promise<RestaurentInterface[]>;
+  ): Promise<RestaurentInterface[]>;
   restaurentListTotal: number;
 }
 
@@ -63,7 +66,7 @@ const mapDispatchToProps = (
       const restaurentList = await thunkDispatch(
         fetchRestaurentList({ start, limit, conditions })
       );
-      return restaurentList;
+      return (restaurentList as unknown) as RestaurentInterface[];
     },
   };
 };
@@ -77,6 +80,15 @@ const RestaurentList: React.FC<RestaurentProps> = ({
   history,
 }) => {
   const [pageCount, setPageCount] = React.useState(0);
+  const [columnCount, setColumnCount] = useState(3);
+
+  const onResize = (width: number): void => {
+    if (width < 768) {
+      setColumnCount(1);
+    } else {
+      setColumnCount(3);
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -152,7 +164,7 @@ const RestaurentList: React.FC<RestaurentProps> = ({
     if (list && cellIndex > totalRecords - 1) return <></>;
     const restaurentData = list && list[row * colCount + col];
     return (
-      <div style={{ ...style, padding: "40px" }}>
+      <div id="restaurent-cell" style={{ ...style, padding: "40px" }}>
         <Card style={{ minHeight: "100px" }}>
           <Card.Body>
             <Card.Title>{restaurentData && restaurentData.name}</Card.Title>
@@ -191,10 +203,11 @@ const RestaurentList: React.FC<RestaurentProps> = ({
             <GridInfiniteLoader
               listData={restaurentList}
               isLoading={restaurentListState === API_STATE.LOADING}
-              columnCount={3}
+              columnCount={columnCount}
               cellData={cellData}
               fetchList={fetchRestaurentList}
               totalRecords={restaurentListTotal}
+              onResize={onResize}
               fetchConditon=""
             />
           )}

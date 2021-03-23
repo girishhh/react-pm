@@ -5,11 +5,13 @@ import {
   AutoSizer,
   CellMeasurer,
   CellMeasurerCache,
+  ColumnSizer,
   Grid,
   GridCellRenderer,
   Index,
   IndexRange,
   InfiniteLoader,
+  Size,
   WindowScroller,
 } from "react-virtualized";
 import { RenderedSection } from "react-virtualized/dist/es/Grid";
@@ -32,6 +34,7 @@ interface Props {
     totalRecords: number
   ) => JSX.Element;
   totalRecords: number;
+  onResize?(width: number): void;
 }
 
 class GridInfiniteLoader extends React.Component<
@@ -133,8 +136,9 @@ class GridInfiniteLoader extends React.Component<
 
   render() {
     const rowCount = this.state.listData.length
-      ? this.state.listData.length / this.props.columnCount + 1
+      ? Math.ceil(this.state.listData.length / this.props.columnCount) + 1
       : 1;
+    const { onResize } = this.props;
     return (
       <div className="container-fluid grid-infinite-loader">
         <InfiniteLoader
@@ -148,10 +152,42 @@ class GridInfiniteLoader extends React.Component<
             return (
               <WindowScroller>
                 {({ height, scrollTop }) => (
-                  <AutoSizer disableHeight onResize={() => {}}>
+                  <AutoSizer
+                    disableHeight
+                    onResize={(info: Size) => {
+                      onResize?.(info.width);
+                      this.cache.clearAll();
+                    }}
+                  >
                     {({ width }) => (
                       <>
-                        <Grid
+                        <ColumnSizer
+                          columnMaxWidth={500}
+                          columnMinWidth={50}
+                          columnCount={this.props.columnCount}
+                          width={width}
+                        >
+                          {({ registerChild }) => (
+                            <Grid
+                              autoHeight
+                              width={width}
+                              height={height}
+                              scrollTop={scrollTop}
+                              ref={(grid) => {
+                                this.grid = grid;
+                                registerChild(grid);
+                              }}
+                              columnWidth={width / this.props.columnCount}
+                              columnCount={this.props.columnCount}
+                              rowCount={rowCount}
+                              rowHeight={this.cache.rowHeight}
+                              cellRenderer={this.cellRenderer}
+                              onSectionRendered={this.onSectionRendered}
+                            />
+                          )}
+                        </ColumnSizer>
+
+                        {/* <Grid
                           autoHeight
                           width={width}
                           height={height}
@@ -166,7 +202,7 @@ class GridInfiniteLoader extends React.Component<
                           rowHeight={this.cache.rowHeight}
                           cellRenderer={this.cellRenderer}
                           onSectionRendered={this.onSectionRendered}
-                        />
+                        /> */}
                         {this.props.isLoading && (
                           <div className="spinner">
                             <Spinner animation="border" />
