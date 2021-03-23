@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import React, { CSSProperties, Dispatch } from "react";
+import React, { CSSProperties, Dispatch, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -74,7 +74,7 @@ const MenuList: React.FC<MenuProps> = ({
     const menuData = list && list[row * colCount + col];
     return (
       <div style={{ ...style, padding: "40px" }}>
-        <Card style={{ minHeight: "100px" }}>
+        <Card style={{ minHeight: "150px" }}>
           <Card.Header>
             {menuData && (
               <Link to={`menus/${menuData._id}/edit`} replace>
@@ -95,6 +95,15 @@ const MenuList: React.FC<MenuProps> = ({
 
   const { restaurentId } = match.params as any;
   const conditions = { restaurent: { eq: restaurentId } };
+  const [columnCount, setColumnCount] = useState(3);
+
+  const onResize = (width: number): void => {
+    if (width < 768) {
+      setColumnCount(1);
+    } else {
+      setColumnCount(3);
+    }
+  };
 
   return (
     <div className="menu-list d-flex">
@@ -107,11 +116,12 @@ const MenuList: React.FC<MenuProps> = ({
           <GridInfiniteLoader
             listData={menuList}
             isLoading={menuListState === API_STATE.LOADING}
-            columnCount={3}
+            columnCount={columnCount}
             cellData={cellData}
             fetchList={fetchMenuList}
             totalRecords={menuListTotal}
             fetchConditon={JSON.stringify(conditions)}
+            onResize={onResize}
           />
         </Col>
       </Row>
