@@ -16,6 +16,7 @@ export interface MenuStoreState {
   menuUpdate: DefaultResponse;
   menuCreate: DefaultResponse;
   menuDelete: DefaultResponse;
+  menuActivate: DefaultResponse;
 }
 
 export interface MenuListReqPayLoad {
@@ -61,6 +62,9 @@ export type MenuAction = {
     | "menus/create/error"
     | "menus/delete/data"
     | "menus/delete/loading"
-    | "menus/delete/error";
+    | "menus/delete/error"
+    | "menus/activate/data"
+    | "menus/activate/loading"
+    | "menus/activate/error";
   payload?: MenuPayloadTypes;
 };

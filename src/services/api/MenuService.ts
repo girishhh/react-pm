@@ -94,6 +94,22 @@ class MenuService {
     );
     return result;
   }
+
+  static async activateMenu(_id: string): Promise<AxiosResponse> {
+    const requestConfig = new APIParamsBuilderHelper(
+      MenuConstants.MENU_UPDATE_API,
+      HTTP_METHODS.PUT
+    )
+      .addPathParams({ _id })
+      .build().getConfig;
+
+    const result = await APIHelper.sendRequest(requestConfig).catch(
+      (err: string) => {
+        throw err;
+      }
+    );
+    return result;
+  }
 }
 
 export default MenuService;

@@ -89,3 +89,16 @@ export function deleteMenu(_id: string, history: H.History) {
     }
   };
 }
+
+export function activateMenu(_id: string, history: H.History) {
+  return async function activateMenuThunk(dispatch: Dispatch<MenuAction>) {
+    try {
+      dispatch({ type: "menus/activate/loading" });
+      const data = await MenuService.activateMenu(_id);
+      dispatch({ type: "menus/activate/data" });
+      if (data.status === 204) history.go(0);
+    } catch (error) {
+      dispatch({ type: "menus/activate/error", payload: error });
+    }
+  };
+}

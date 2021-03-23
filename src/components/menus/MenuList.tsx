@@ -73,7 +73,7 @@ const MenuList: React.FC<MenuProps> = ({
     if (list && cellIndex > totalRecords - 1) return <></>;
     const menuData = list && list[row * colCount + col];
     return (
-      <div style={{ ...style, padding: "40px" }}>
+      <div style={{ ...style }} className="p-3">
         <Card style={{ minHeight: "150px" }}>
           <Card.Header>
             {menuData && (
@@ -106,13 +106,19 @@ const MenuList: React.FC<MenuProps> = ({
   };
 
   return (
-    <div className="menu-list d-flex">
-      <Row className="w-100 mx-0">
-        <Col>
+    <Row className="menu-list d-flex w-100 mx-0">
+      <Col className="px-0">
+        <Row>
           {menuListState === API_STATE.ERROR && (
             <ApiError errors={[menuListError?.response?.data.message]} />
           )}
-
+        </Row>
+        <Row className="float-right create-menu">
+          <Link to={`/restaurents/${restaurentId}/menus/create`}>
+            Create Menu
+          </Link>
+        </Row>
+        <Row className="w-100 mx-0">
           <GridInfiniteLoader
             listData={menuList}
             isLoading={menuListState === API_STATE.LOADING}
@@ -123,9 +129,9 @@ const MenuList: React.FC<MenuProps> = ({
             fetchConditon={JSON.stringify(conditions)}
             onResize={onResize}
           />
-        </Col>
-      </Row>
-    </div>
+        </Row>
+      </Col>
+    </Row>
   );
 };
 

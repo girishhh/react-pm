@@ -33,6 +33,12 @@ const initialState = {
     error: null,
     formData: {},
   },
+  menuActivate: {
+    data: {},
+    state: API_STATE.DONE,
+    error: null,
+    formData: {},
+  },
 };
 
 const menuReducer = (
@@ -40,7 +46,14 @@ const menuReducer = (
   action: ActionType
 ): MenuStoreState => {
   const { type, payload } = action;
-  const { menuList, menuDetails, menuUpdate, menuCreate, menuDelete } = state;
+  const {
+    menuList,
+    menuDetails,
+    menuUpdate,
+    menuCreate,
+    menuDelete,
+    menuActivate,
+  } = state;
   switch (type) {
     case "menus/list/loading":
       menuList.state = API_STATE.LOADING;
@@ -98,6 +111,17 @@ const menuReducer = (
     case "menus/delete/data":
       menuDelete.state = API_STATE.DONE;
       return { ...state, menuDelete };
+
+    case "menus/activate/loading":
+      menuActivate.state = API_STATE.LOADING;
+      return { ...state, menuActivate };
+    case "menus/activate/error":
+      menuActivate.state = API_STATE.ERROR;
+      menuActivate.error = payload;
+      return { ...state, menuActivate };
+    case "menus/activate/data":
+      menuActivate.state = API_STATE.DONE;
+      return { ...state, menuActivate };
     default:
       return state;
   }
