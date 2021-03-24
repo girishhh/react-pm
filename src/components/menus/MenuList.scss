@@ -1,3 +1,5 @@
+@import "colors";
+
 .menu-list {
   .delete-btn {
     vertical-align: initial;
@@ -7,5 +9,9 @@
   }
   .create-menu {
     padding-right: 47px;
+  }
+
+  .menu-active {
+    border: 2px solid $green;
   }
 }

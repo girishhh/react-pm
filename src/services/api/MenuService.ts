@@ -95,12 +95,16 @@ class MenuService {
     return result;
   }
 
-  static async activateMenu(_id: string): Promise<AxiosResponse> {
+  static async activateMenu(
+    _id: string,
+    restaurentId: string
+  ): Promise<AxiosResponse> {
     const requestConfig = new APIParamsBuilderHelper(
-      MenuConstants.MENU_UPDATE_API,
+      MenuConstants.MENU_ACTIVATE,
       HTTP_METHODS.PUT
     )
       .addPathParams({ _id })
+      .addRequestBody({ restaurentId })
       .build().getConfig;
 
     const result = await APIHelper.sendRequest(requestConfig).catch(

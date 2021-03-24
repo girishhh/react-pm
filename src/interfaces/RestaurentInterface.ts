@@ -8,7 +8,7 @@ export interface RestaurentInterface {
   name: string;
   address: AddressInterface;
   company: string;
-  activeMenu: MenuInterface;
+  activeMenu: MenuInterface | string;
   lat: number;
   lng: number;
   geo_location_description: string;
