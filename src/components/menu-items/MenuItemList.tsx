@@ -32,7 +32,7 @@ const mapStateToProps = (state: { menuItemReducer: MenuItemStoreState }) => {
 
   return {
     menuItemList: menuItemList.data.menuItemList,
-    menuItemListTotal: menuItemList.data.total,
+    menuItemListTotal: menuItemList.data.restaurentMenuItemCount,
     menuItemListError: menuItemList.error,
     menuItemListState: menuItemList.state,
   };
@@ -117,7 +117,9 @@ const MenuItemList: React.FC<MenuItemProps> = ({
           <CommonTable
             columns={columns}
             data={data}
-            fetchCondition={""}
+            fetchCondition={JSON.stringify({
+              restaurent: { eq: restaurentId },
+            })}
             fetchData={fetchMenuItemList}
             loading={menuItemListState === API_STATE.LOADING}
             pageCount={pageCount}

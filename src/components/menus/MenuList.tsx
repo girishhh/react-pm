@@ -52,7 +52,7 @@ const mapStateToProps = (state: {
   const { restaurentDetails } = state.restaurentReducer;
   return {
     menuList: menuList.data.menuList,
-    menuListTotal: menuList.data.total,
+    menuListTotal: menuList.data.restaurentMenuCount,
     menuListError: menuList.error,
     menuListState: menuList.state,
     restaurentDetails: restaurentDetails.data.restaurentDetails,
@@ -117,9 +117,11 @@ const MenuList: React.FC<MenuProps> = ({
     return (
       <div style={{ ...style }} className="p-3">
         <Card
-          style={{ minHeight: "150px" }}
+          style={{ minHeight: "180px" }}
           className={classnames({
-            "menu-active": menuData?._id === restaurentDetails?.activeMenu,
+            "menu-active":
+              menuData?._id ===
+              (restaurentDetails?.activeMenu as MenuInterface)._id,
           })}
         >
           <Card.Header>
@@ -127,7 +129,7 @@ const MenuList: React.FC<MenuProps> = ({
               <Row>
                 <Col>
                   <Link
-                    className="float-left"
+                    className="float-left p-2"
                     to={`menus/${menuData._id}/edit`}
                     replace
                   >
