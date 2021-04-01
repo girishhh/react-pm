@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import React, { Dispatch } from "react";
-import { Col } from "react-bootstrap";
-import { Row, Spinner } from "react-bootstrap";
+import { Col, Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
@@ -13,11 +12,16 @@ import {
 } from "../../interfaces/RestaurentInterface";
 import { fetchRestaurentDetails } from "../../redux/thunks/RestaurentThunks";
 import { API_STATE } from "../../utils/constants/common";
-import { ViewActionTypes } from "../../utils/constants/common";
+import { ROLES } from "../../utils/constants/RoleConstants";
 import { getUser } from "../../utils/helpers/AuthHelper";
-import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
+import {
+  formatResponseErrors,
+  hasRole,
+} from "../../utils/helpers/CommonHelper";
 import ApiError from "../common/ApiErrors";
 import secureDomain from "../hoc/SecureDomain";
+import CustomerRestaurentView from "./CustomerRestaurentView";
+import OwnerAdminRestaurentView from "./OwnerAdminRestaurentView";
 
 interface Props extends LocationProps {
   restaurentDetails: RestaurentInterface;
@@ -68,13 +72,9 @@ class RestaurentView extends React.Component<Props> {
     const canViewRestaurent = currentUser?.permissions.includes(
       "viewRestaurent"
     );
-    const canViewFoodItemList = currentUser?.permissions.includes(
-      "viewFoodItemList"
-    );
-    const { restaurentId } = this.props.match.params as any;
 
     return (
-      <div className="restaurent-list">
+      <div className="restaurent-view h-100">
         {this.isLoading() && (
           <div className="w-100 d-flex justify-content-center">
             <Spinner animation="border" />
@@ -87,44 +87,17 @@ class RestaurentView extends React.Component<Props> {
         {restaurentDetailsLoadingState === API_STATE.DONE &&
           canViewRestaurent &&
           restaurentDetails && (
-            <div className="pl-5">
-              <Row className="w-100 justify-content-start">
-                <Row className="w-100">RestaurentName</Row>
-                <Row className="w-100">{restaurentDetails.name}</Row>
-
-                <Row className="w-100 pt-3">Latitude</Row>
-                <Row className="w-100">{restaurentDetails.lat}</Row>
-
-                <Row className="w-100 pt-3">Longitude</Row>
-                <Row className="w-100">{restaurentDetails.lng}</Row>
-
-                <Row className="w-100 pt-3">Geo Location</Row>
-                <Row className="w-100">
-                  {restaurentDetails.geo_location_description}
-                </Row>
-              </Row>
-              <Row className="w-100 justify-content-start">
-                {canViewFoodItemList && (
-                  <Row className="pt-3 w-100">
-                    <Col md="2" className="pl-0">
-                      <NavLink to={`/restaurents/${restaurentId}/food-items`}>
-                        View FoodItems
-                      </NavLink>
-                    </Col>
-                    <Col md="2" className="pl-0">
-                      <NavLink to={`/restaurents/${restaurentId}/menus`}>
-                        View Menus
-                      </NavLink>
-                    </Col>
-                    <Col md="2" className="pl-0">
-                      <NavLink to={`/restaurents/${restaurentId}/menu-items`}>
-                        View MenuItems
-                      </NavLink>
-                    </Col>
-                  </Row>
-                )}
-              </Row>
-            </div>
+            <>
+              {(hasRole(currentUser?.roles, ROLES.COMPANY_ADMIN) ||
+                hasRole(currentUser?.roles, ROLES.OWNER)) && (
+                <OwnerAdminRestaurentView
+                  restaurentDetails={restaurentDetails}
+                />
+              )}
+              {hasRole(currentUser?.roles, ROLES.CUSTOMER) && (
+                <CustomerRestaurentView restaurentDetails={restaurentDetails} />
+              )}
+            </>
           )}
       </div>
     );

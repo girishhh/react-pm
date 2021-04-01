@@ -1,0 +1,24 @@
+@import "colors";
+.customer-restaurent-view {
+  padding-left: 15px;
+  .category-filters {
+    border-right: 1px solid black;
+    .nav {
+      .nav-link {
+        &:focus {
+          color: $primary;
+        }
+        &:hover {
+          color: $primary;
+        }
+      }
+      a {
+        color: black;
+      }
+    }
+  }
+
+  .food-items {
+    border-right: 1px solid black;
+  }
+}

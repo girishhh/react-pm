@@ -5,4 +5,9 @@
       box-shadow: none;
     }
   }
+  #restaurent-cell > .card {
+    &:hover {
+      border: 1px solid black;
+    }
+  }
 }

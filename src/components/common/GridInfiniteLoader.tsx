@@ -70,6 +70,7 @@ class GridInfiniteLoader extends React.Component<
       endIndex - startIndex,
       this.props.fetchConditon
     );
+
     if (!lodash.isEmpty(listData)) {
       const existingList = this.state.listData;
       for (let i = 0; i < listData.length; i++) {
@@ -187,22 +188,6 @@ class GridInfiniteLoader extends React.Component<
                           )}
                         </ColumnSizer>
 
-                        {/* <Grid
-                          autoHeight
-                          width={width}
-                          height={height}
-                          scrollTop={scrollTop}
-                          ref={(grid) => {
-                            this.grid = grid;
-                            registerChild(grid);
-                          }}
-                          columnWidth={width / this.props.columnCount}
-                          columnCount={this.props.columnCount}
-                          rowCount={rowCount}
-                          rowHeight={this.cache.rowHeight}
-                          cellRenderer={this.cellRenderer}
-                          onSectionRendered={this.onSectionRendered}
-                        /> */}
                         {this.props.isLoading && (
                           <div className="spinner">
                             <Spinner animation="border" />

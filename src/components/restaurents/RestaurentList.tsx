@@ -165,7 +165,12 @@ const RestaurentList: React.FC<RestaurentProps> = ({
     const restaurentData = list && list[row * colCount + col];
     return (
       <div id="restaurent-cell" style={{ ...style, padding: "40px" }}>
-        <Card style={{ minHeight: "100px" }}>
+        <Card
+          style={{ minHeight: "100px" }}
+          onClick={() =>
+            history.push(`/restaurents/${restaurentData._id}/view`)
+          }
+        >
           <Card.Body>
             <Card.Title>{restaurentData && restaurentData.name}</Card.Title>
             <Card.Text>
@@ -180,7 +185,7 @@ const RestaurentList: React.FC<RestaurentProps> = ({
   const user = getUser();
 
   return (
-    <div className="restaurent-list d-flex">
+    <div className="restaurent-list d-flex h-100">
       <Row className="w-100 mx-0">
         <Col>
           {restaurentListState === API_STATE.ERROR && (
