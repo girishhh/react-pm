@@ -95,44 +95,50 @@ const CustomerRestaurentView: React.FC<CustomerRestaurentViewProps> = ({
   };
 
   return (
-    <Row className="customer-restaurent-view h-100">
-      <Col md="3" className="category-filters">
-        <Nav>
-          {categories.map((cat, index) => (
-            <NavItem className="w-100 text-right" as="li" key={index}>
-              <NavLink
-                onClick={() => {
-                  setCategory(cat._id);
-                }}
-              >
-                {cat.name}
-              </NavLink>
-            </NavItem>
-          ))}
-        </Nav>
-      </Col>
-      <Col md="6" className="food-items">
-        <GridInfiniteLoader
-          key={category}
-          listData={foodItemList}
-          isLoading={foodItemListState === API_STATE.LOADING}
-          columnCount={1}
-          cellData={cellData}
-          fetchList={fetchFoodItemList}
-          fetchConditon={
-            category
-              ? JSON.stringify({
-                  restaurent: { eq: restaurentDetails._id },
-                  categories: { eq: category },
-                })
-              : JSON.stringify({
-                  restaurent: { eq: restaurentDetails._id },
-                })
-          }
-          totalRecords={foodItemListTotal}
-        />
-      </Col>
-    </Row>
+    <>
+      <Row className="customer-restaurent-header">
+        <Col md="3">Image</Col>
+        <Col md="6">Ratings</Col>
+      </Row>
+      <Row className="customer-restaurent-view h-100">
+        <Col md="3" className="category-filters">
+          <Nav>
+            {categories.map((cat, index) => (
+              <NavItem className="w-100 text-right" as="li" key={index}>
+                <NavLink
+                  onClick={() => {
+                    setCategory(cat._id);
+                  }}
+                >
+                  {cat.name}
+                </NavLink>
+              </NavItem>
+            ))}
+          </Nav>
+        </Col>
+        <Col md="6" className="food-items">
+          <GridInfiniteLoader
+            key={category}
+            listData={foodItemList}
+            isLoading={foodItemListState === API_STATE.LOADING}
+            columnCount={1}
+            cellData={cellData}
+            fetchList={fetchFoodItemList}
+            fetchConditon={
+              category
+                ? JSON.stringify({
+                    restaurent: { eq: restaurentDetails._id },
+                    categories: { eq: category },
+                  })
+                : JSON.stringify({
+                    restaurent: { eq: restaurentDetails._id },
+                  })
+            }
+            totalRecords={foodItemListTotal}
+          />
+        </Col>
+      </Row>
+    </>
   );
 };
 

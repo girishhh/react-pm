@@ -5,10 +5,16 @@ import { RestaurentInterface } from "../../interfaces/RestaurentInterface";
 
 const getCategories = (restaurentDetails: RestaurentInterface) => {
   let categories: FoodCategoryInterface[] = [];
-  (restaurentDetails.activeMenu as MenuInterface).menuItems.map((menuItem) => {
-    categories = categories.concat(menuItem.categories);
-  });
-  return uniqBy(categories, "_id");
+  const activeMenu = restaurentDetails.activeMenu as MenuInterface;
+  const menuItems = activeMenu?.menuItems;
+  if (activeMenu && menuItems) {
+    menuItems.map((menuItem) => {
+      categories = categories.concat(menuItem.categories);
+    });
+    return uniqBy(categories, "_id");
+  } else {
+    return [];
+  }
 };
 
 export { getCategories };

@@ -1,4 +1,4 @@
-import lodash from "lodash";
+import { isEmpty } from "lodash";
 import React, { CSSProperties } from "react";
 import { Spinner } from "react-bootstrap";
 import {
@@ -43,7 +43,6 @@ class GridInfiniteLoader extends React.Component<
 > {
   cache: CellMeasurerCache;
   onRowsRendered: (params: IndexRange) => void;
-  grid: any;
 
   constructor(props: Props) {
     super(props);
@@ -71,7 +70,7 @@ class GridInfiniteLoader extends React.Component<
       this.props.fetchConditon
     );
 
-    if (!lodash.isEmpty(listData)) {
+    if (!isEmpty(listData)) {
       const existingList = this.state.listData;
       for (let i = 0; i < listData.length; i++) {
         existingList.push(listData[i]);
@@ -119,22 +118,6 @@ class GridInfiniteLoader extends React.Component<
     });
   };
 
-  // componentDidUpdate(prevProps: Props) {
-  //   if (
-  //     this.props.listData &&
-  //     !lodash.isEqual(prevProps.listData, this.props.listData)
-  //   ) {
-  //     const { listData } = this.props;
-  //     const existingList = this.state.listData;
-  //     for (let i = 0; i < listData.length; i++) {
-  //       existingList.push(listData[i]);
-  //     }
-  //     this.setState({
-  //       listData: existingList,
-  //     });
-  //   }
-  // }
-
   render() {
     const rowCount = this.state.listData.length
       ? Math.ceil(this.state.listData.length / this.props.columnCount) + 1
@@ -148,7 +131,7 @@ class GridInfiniteLoader extends React.Component<
           rowCount={rowCount}
           threshold={1}
         >
-          {({ onRowsRendered, registerChild }) => {
+          {({ onRowsRendered }) => {
             this.onRowsRendered = onRowsRendered;
             return (
               <WindowScroller>
@@ -175,7 +158,6 @@ class GridInfiniteLoader extends React.Component<
                               height={height}
                               scrollTop={scrollTop}
                               ref={(grid) => {
-                                this.grid = grid;
                                 registerChild(grid);
                               }}
                               columnWidth={width / this.props.columnCount}
