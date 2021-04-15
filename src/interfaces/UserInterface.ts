@@ -1,4 +1,5 @@
 import { AddressInterface } from "./AddressInterface";
+import { CartInterface } from "./CartInterface";
 import { CompanyInterface } from "./CompanyInterface";
 import { RestaurentInterface } from "./RestaurentInterface";
 import { RoleInterface } from "./RoleInterface";
@@ -27,6 +28,7 @@ export interface UserStoreState {
   userList: DefaultResponse;
   userUpdate: DefaultResponse;
   reSendConfirmation: DefaultResponse;
+  userCartDetails: DefaultResponse;
 }
 
 export interface CreateUserSuccessMsg {
@@ -47,7 +49,8 @@ export interface UserListReqPayLoad {
 export type UserPayloadTypes =
   | UserInterface
   | CreateUserSuccessMsg
-  | UserListResp;
+  | UserListResp
+  | CartInterface;
 
 export type UserAction = {
   type:
@@ -63,7 +66,10 @@ export type UserAction = {
     | "users/list/reset"
     | "users/update/data"
     | "users/update/loading"
-    | "users/update/error";
+    | "users/update/error"
+    | "users/cartDetails/data"
+    | "users/cartDetails/loading"
+    | "users/cartDetails/error";
   payload?: UserPayloadTypes;
 };
 

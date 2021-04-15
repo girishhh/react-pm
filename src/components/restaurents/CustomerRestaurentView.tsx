@@ -1,6 +1,8 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";
 import React, { CSSProperties, Dispatch, useState } from "react";
-import { Card, Col, Nav, NavItem, NavLink, Row } from "react-bootstrap";
+import { Button, Card, Col, Nav, NavItem, NavLink, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import {
@@ -12,6 +14,8 @@ import { RestaurentInterface } from "../../interfaces/RestaurentInterface";
 import { fetchFoodItemList } from "../../redux/thunks/FoodItemThunks";
 import { API_STATE } from "../../utils/constants/common";
 import { getCategories } from "../../utils/helpers/RestaurentHelper";
+import AddToCart from "../cart-items/AddToCart";
+import CartDetails from "../carts/CartDetails";
 import GridInfiniteLoader from "../common/GridInfiniteLoader";
 import secureDomain from "../hoc/SecureDomain";
 import "./CustomerRestaurentView.scss";
@@ -84,7 +88,14 @@ const CustomerRestaurentView: React.FC<CustomerRestaurentViewProps> = ({
       <div id="restaurent-cell" style={{ ...style, padding: "40px" }}>
         <Card style={{ minHeight: "100px" }}>
           <Card.Body>
-            <Card.Title>{foodItem && foodItem.name}</Card.Title>
+            <Card.Title>
+              <Row>
+                <Col>{foodItem && foodItem.name}</Col>
+                <Col md={{ offset: "7" }}>
+                  {foodItem && <AddToCart cartItem={foodItem.cartItem} />}
+                </Col>
+              </Row>
+            </Card.Title>
             <Card.Text>
               <span>{foodItem && foodItem.name}</span>
             </Card.Text>
@@ -136,6 +147,9 @@ const CustomerRestaurentView: React.FC<CustomerRestaurentViewProps> = ({
             }
             totalRecords={foodItemListTotal}
           />
+        </Col>
+        <Col md="3">
+          <CartDetails />
         </Col>
       </Row>
     </>

@@ -17,7 +17,6 @@ export function fetchUserList(payload: UserListReqPayLoad) {
         payload.limit,
         payload.conditions
       );
-      console.log("USER LIST", data);
       dispatch({
         type: "users/list/data",
         payload: data,
@@ -75,6 +74,18 @@ export function reSendConfirmation(email: string) {
         });
     } catch (error) {
       dispatch({ type: "users/reSendConfirmation/error", payload: error });
+    }
+  };
+}
+
+export function getUserCartDetails() {
+  return async function getUserCartDetails(dispatch: Dispatch<UserAction>) {
+    try {
+      dispatch({ type: "users/cartDetails/loading" });
+      const data = await UserService.getUserCartDetails();
+      dispatch({ type: "users/cartDetails/data", payload: data });
+    } catch (error) {
+      dispatch({ type: "users/cartDetails/error", payload: error });
     }
   };
 }

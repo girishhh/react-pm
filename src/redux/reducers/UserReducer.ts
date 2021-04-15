@@ -27,6 +27,12 @@ const initialState = {
     error: null,
     formData: {},
   },
+  userCartDetails: {
+    data: {},
+    state: API_STATE.DONE,
+    error: null,
+    formData: {},
+  },
 };
 
 const userReducer = (
@@ -34,7 +40,13 @@ const userReducer = (
   action: ActionType
 ): UserStoreState => {
   const { type, payload } = action;
-  const { userCreate, userList, userUpdate, reSendConfirmation } = state;
+  const {
+    userCreate,
+    userList,
+    userUpdate,
+    reSendConfirmation,
+    userCartDetails,
+  } = state;
   switch (type) {
     case "users/create/loading":
       userCreate.state = API_STATE.LOADING;
@@ -86,6 +98,18 @@ const userReducer = (
     case "users/update/data":
       userUpdate.state = API_STATE.DONE;
       return { ...state, userUpdate };
+
+    case "users/cartDetails/loading":
+      userCartDetails.state = API_STATE.LOADING;
+      return { ...state, userCartDetails };
+    case "users/cartDetails/error":
+      userCartDetails.state = API_STATE.ERROR;
+      userCartDetails.error = payload;
+      return { ...state, userCartDetails };
+    case "users/cartDetails/data":
+      userCartDetails.data = payload;
+      userCartDetails.state = API_STATE.DONE;
+      return { ...state, userCartDetails };
     default:
       return state;
   }

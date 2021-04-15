@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { CartInterface } from "../../interfaces/CartInterface";
 import { KeyValue } from "../../interfaces/CommonInterface";
 import { UserInterface, UserListResp } from "../../interfaces/UserInterface";
 import { HTTP_METHODS } from "../../utils/constants/common";
@@ -74,6 +75,20 @@ class UserService {
       throw err;
     });
     return result;
+  }
+
+  static async getUserCartDetails(): Promise<CartInterface> {
+    const requestConfig = new APIParamsBuilderHelper(
+      UserConstants.USER_CART_DETAILS,
+      HTTP_METHODS.GET
+    ).build().getConfig;
+
+    const result = await APIHelper.sendRequest<CartInterface>(
+      requestConfig
+    ).catch((err: string) => {
+      throw err;
+    });
+    return result?.data as CartInterface;
   }
 }
 

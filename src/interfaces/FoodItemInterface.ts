@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { CartItemInterface } from "./CartItemInterface";
 import { CompanyInterface } from "./CompanyInterface";
 import { FoodCategoryInterface } from "./FoodCategoryInterface";
 import { RestaurentInterface } from "./RestaurentInterface";
@@ -16,6 +17,7 @@ export interface FoodItemInterface {
   _id: string;
   name: string;
   type: string;
+  cartItem: CartItemInterface;
   categories: FoodCategoryInterface[];
   restaurent: RestaurentInterface;
   company: CompanyInterface;
