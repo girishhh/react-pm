@@ -11,12 +11,14 @@ export interface FoodItemStoreState {
   foodItemUpdate: DefaultResponse;
   foodItemCreate: DefaultResponse;
   foodItemDelete: DefaultResponse;
+  indexedFoodItems: {};
 }
 
 export interface FoodItemInterface {
   _id: string;
   name: string;
   type: string;
+  price: number;
   cartItem: CartItemInterface;
   categories: FoodCategoryInterface[];
   restaurent: RestaurentInterface;
@@ -67,5 +69,6 @@ export type FoodItemAction = {
     | "food-items/delete/data"
     | "food-items/delete/loading"
     | "food-items/delete/error";
+
   payload?: FoodItemPayloadTypes;
 };

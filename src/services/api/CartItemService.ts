@@ -1,5 +1,8 @@
 import { AxiosResponse } from "axios";
-import { CartItemInterface } from "../../interfaces/CartItemInterface";
+import {
+  CartItemInterface,
+  CreateCartItemRequestInterface,
+} from "../../interfaces/CartItemInterface";
 import { HTTP_METHODS } from "../../utils/constants/common";
 import { CartItemConstants } from "../../utils/constants/CartItemConstants";
 import APIHelper from "../../utils/helpers/APIHelper";
@@ -7,7 +10,7 @@ import APIParamsBuilderHelper from "../../utils/helpers/APIParamsBuilderHelper";
 
 class CartItemService {
   static async createCartItem(
-    cartItem: CartItemInterface
+    cartItem: CreateCartItemRequestInterface
   ): Promise<AxiosResponse> {
     const requestConfig = new APIParamsBuilderHelper(
       CartItemConstants.CART_ITEM_CREATE_API,

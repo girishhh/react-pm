@@ -84,7 +84,6 @@ const mapDispatchToProps = (
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
       thunkDispatch(createFoodItem(foodItem, history, successUrl));
     },
-
     fetchFoodItemDetails: (_id: string) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
       thunkDispatch(fetchFoodItemDetails({ _id }));

@@ -83,7 +83,10 @@ const CartDetails: React.FC<Props> = ({
             <Row className="mx-0 pt-3">
               <Col>{foodItem.name}</Col>
               <Col>
-                <AddToCart cartItem={cartItem} />
+                <AddToCart
+                  key={foodItem._id}
+                  foodItem={{ ...foodItem, cartItem } as FoodItemInterface}
+                />
               </Col>
               <Col>{cartItem.price * cartItem.quantity}</Col>
             </Row>

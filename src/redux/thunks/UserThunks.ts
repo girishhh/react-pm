@@ -82,8 +82,8 @@ export function getUserCartDetails() {
   return async function getUserCartDetails(dispatch: Dispatch<UserAction>) {
     try {
       dispatch({ type: "users/cartDetails/loading" });
-      const data = await UserService.getUserCartDetails();
-      dispatch({ type: "users/cartDetails/data", payload: data });
+      const response = await UserService.getUserCartDetails();
+      dispatch({ type: "users/cartDetails/data", payload: response });
     } catch (error) {
       dispatch({ type: "users/cartDetails/error", payload: error });
     }

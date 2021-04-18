@@ -1,8 +1,7 @@
 import { AxiosError } from "axios";
 import React, { Dispatch } from "react";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import { LocationProps } from "../../interfaces/CommonInterface";
 import {
@@ -33,7 +32,7 @@ interface Props extends LocationProps {
 const mapStateToProps = (state: {
   restaurentReducer: RestaurentStoreState;
 }) => {
-  const { restaurentDetails, restaurentUpdate } = state.restaurentReducer;
+  const { restaurentDetails } = state.restaurentReducer;
   return {
     restaurentDetails: restaurentDetails.data.restaurentDetails,
     restaurentDetailsError: restaurentDetails.error,
@@ -80,6 +79,7 @@ class RestaurentView extends React.Component<Props> {
             <Spinner animation="border" />
           </div>
         )}
+
         {restaurentDetailsLoadingState === API_STATE.ERROR && (
           <ApiError errors={formatResponseErrors(restaurentDetailsError)} />
         )}

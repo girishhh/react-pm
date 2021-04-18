@@ -1,8 +1,6 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";
 import React, { CSSProperties, Dispatch, useState } from "react";
-import { Button, Card, Col, Nav, NavItem, NavLink, Row } from "react-bootstrap";
+import { Card, Col, Nav, NavItem, NavLink, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import {
@@ -92,7 +90,7 @@ const CustomerRestaurentView: React.FC<CustomerRestaurentViewProps> = ({
               <Row>
                 <Col>{foodItem && foodItem.name}</Col>
                 <Col md={{ offset: "7" }}>
-                  {foodItem && <AddToCart cartItem={foodItem.cartItem} />}
+                  {foodItem && <AddToCart foodItem={foodItem} />}
                 </Col>
               </Row>
             </Card.Title>

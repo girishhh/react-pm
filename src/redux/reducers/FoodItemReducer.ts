@@ -33,6 +33,7 @@ const initialState = {
     error: null,
     formData: {},
   },
+  indexedFoodItems: {},
 };
 
 const foodItemReducer = (
@@ -46,6 +47,7 @@ const foodItemReducer = (
     foodItemUpdate,
     foodItemCreate,
     foodItemDelete,
+    indexedFoodItems,
   } = state;
   switch (type) {
     case "food-items/list/loading":
@@ -69,8 +71,11 @@ const foodItemReducer = (
       return { ...state, foodItemDetails };
     case "food-items/details/data":
       foodItemDetails.data = payload;
+      //@ts-ignore
+      indexedFoodItems[payload?.foodItemDetails?._id] =
+        payload?.foodItemDetails;
       foodItemDetails.state = API_STATE.DONE;
-      return { ...state, foodItemDetails };
+      return { ...state, foodItemDetails, indexedFoodItems };
 
     case "food-items/update/loading":
       foodItemUpdate.state = API_STATE.LOADING;

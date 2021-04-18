@@ -1,66 +1,147 @@
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as H from "history";
-import React, { Dispatch } from "react";
+import { AxiosError } from "axios";
+import { isEmpty } from "lodash";
+import React, { Dispatch, memo } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import {
   CartItemAction,
   CartItemInterface,
+  CreateCartItemRequestInterface,
 } from "../../interfaces/CartItemInterface";
+import {
+  FoodItemInterface,
+  FoodItemStoreState,
+} from "../../interfaces/FoodItemInterface";
 import {
   createCartItem,
   deleteCartItem,
   refreshCart,
   updateCartItem,
 } from "../../redux/thunks/CartItemThunks";
+import { fetchFoodItemDetails } from "../../redux/thunks/FoodItemThunks";
+import { getUserCartDetails } from "../../redux/thunks/UserThunks";
 import secureDomain from "../hoc/SecureDomain";
 import "./AddToCart.scss";
 
 interface Props {
-  cartItem: CartItemInterface;
+  foodItem: FoodItemInterface;
+  createCartItem(
+    cartItem: CreateCartItemRequestInterface
+  ): Promise<{ status: number }>;
+  updateCartItem(cartItem: CartItemInterface): Promise<{ status: number }>;
+  deleteCartItem(cartItem: CartItemInterface): Promise<{ status: number }>;
+  refreshCart(cartItem: CartItemInterface): void;
+  fetchFoodItemDetails(_id: string): void;
+  foodItemDetailsError: null | AxiosError;
+  foodItemDetailsLoadingState: string;
+  indexedFoodItems: any;
+  fromCartDetails: boolean;
+  getUserCartDetails(): void;
 }
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state: { foodItemReducer: FoodItemStoreState }) => {
+  const { foodItemDetails, indexedFoodItems } = state.foodItemReducer;
+  return {
+    foodItemDetailsError: foodItemDetails.error,
+    foodItemDetailsLoadingState: foodItemDetails.state,
+    indexedFoodItems,
+  };
 };
 
 const mapDispatchToProps = (
   dispatch: Dispatch<CartItemAction> | ThunkDispatch<{}, {}, any>
 ) => {
   return {
-    createCartItem: (cartItem: CartItemInterface, history: H.History) => {
+    createCartItem: async (cartItem: CreateCartItemRequestInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(createCartItem(cartItem, history));
+      const response = await thunkDispatch(createCartItem(cartItem));
+      return (response as unknown) as { status: number };
     },
-    updateCartItem: (cartItem: CartItemInterface, history: H.History) => {
+    updateCartItem: async (cartItem: CartItemInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(updateCartItem(cartItem, history));
+      const response = await thunkDispatch(updateCartItem(cartItem));
+      return (response as unknown) as { status: number };
     },
-    deleteCartItem: (cartItem: CartItemInterface, history: H.History) => {
+    deleteCartItem: async (cartItem: CartItemInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(deleteCartItem(cartItem._id, history));
+      const response = await thunkDispatch(deleteCartItem(cartItem._id));
+      return (response as unknown) as { status: number };
     },
-    refreshCart: (cartItem: CartItemInterface, history: H.History) => {
+    refreshCart: (cartItem: CartItemInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(refreshCart(cartItem, history));
+      thunkDispatch(refreshCart(cartItem));
+    },
+    fetchFoodItemDetails: (_id: string) => {
+      const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
+      thunkDispatch(fetchFoodItemDetails({ _id }));
+    },
+    getUserCartDetails: () => {
+      const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
+      thunkDispatch(getUserCartDetails());
     },
   };
 };
 
-const AddToCart: React.FC<Props> = ({ cartItem }) => {
+const AddToCart: React.FC<Props> = ({
+  foodItem,
+  createCartItem,
+  updateCartItem,
+  deleteCartItem,
+  refreshCart,
+  fetchFoodItemDetails,
+  indexedFoodItems,
+  getUserCartDetails,
+}) => {
+  const { cartItem } = isEmpty(indexedFoodItems)
+    ? foodItem || {}
+    : indexedFoodItems[foodItem._id] || foodItem || {};
+
+  const createAndDisplayUpdatedCartItem = async () => {
+    const response = await createCartItem({
+      price: foodItem.price,
+      quantity: 1,
+      foodItem: foodItem._id,
+      restaurent: foodItem.restaurent._id,
+    });
+    if (response?.status === 201) {
+      fetchFoodItemDetails(foodItem._id);
+      getUserCartDetails();
+    }
+  };
+
+  const updateAndDisplayCartItem = async (quantity: number) => {
+    const response =
+      quantity > 0
+        ? await updateCartItem({ ...cartItem, quantity })
+        : await deleteCartItem(cartItem);
+    if (response?.status === 204 || response?.status === 200) {
+      fetchFoodItemDetails(foodItem._id);
+      getUserCartDetails();
+    }
+  };
+
   return (
     <div className="add-to-cart">
       {!cartItem && (
-        <Button className="add-btn" variant="secondary">
+        <Button
+          className="add-btn"
+          variant="secondary"
+          onClick={createAndDisplayUpdatedCartItem}
+        >
           Add
         </Button>
       )}
       {cartItem && (
         <Row className="update-cart">
           <Col className="p-0">
-            <Button variant="default" className="d-flex">
+            <Button
+              variant="default"
+              className="d-flex"
+              onClick={() => updateAndDisplayCartItem(cartItem.quantity - 1)}
+            >
               <FontAwesomeIcon icon={faMinus} />
             </Button>
           </Col>
@@ -68,7 +149,11 @@ const AddToCart: React.FC<Props> = ({ cartItem }) => {
             <span className="px-2 pt-2">{cartItem.quantity}</span>
           </Col>
           <Col className="p-0">
-            <Button variant="default" className="d-flex">
+            <Button
+              variant="default"
+              className="d-flex"
+              onClick={() => updateAndDisplayCartItem(cartItem.quantity + 1)}
+            >
               <FontAwesomeIcon icon={faPlus} />
             </Button>
           </Col>
@@ -81,4 +166,4 @@ const AddToCart: React.FC<Props> = ({ cartItem }) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(secureDomain<Props>(AddToCart));
+)(secureDomain<Props>(memo(AddToCart)));

@@ -72,11 +72,11 @@ const cartItemReducer = (
     case "cart-items/refreshCart/loading":
       cartRefresh.state = API_STATE.LOADING;
       return { ...state, cartRefresh };
-    case "cart-items/delete/error":
+    case "cart-items/refreshCart/error":
       cartRefresh.state = API_STATE.ERROR;
       cartRefresh.error = payload;
       return { ...state, cartRefresh };
-    case "cart-items/delete/data":
+    case "cart-items/refreshCart/data":
       cartRefresh.state = API_STATE.DONE;
       return { ...state, cartRefresh };
     default:
