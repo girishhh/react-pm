@@ -28,6 +28,7 @@ export interface CartItemInterface {
   _id: string;
   price: number;
   quantity: number;
+  incQuantity?: number;
   restaurent: RestaurentInterface | string;
   foodItem: FoodItemInterface | string;
   cart: CartInterface | string;

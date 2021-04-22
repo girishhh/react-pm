@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";
 import { isEmpty } from "lodash";
 import React, { Dispatch, memo } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import {
@@ -21,8 +21,10 @@ import {
   refreshCart,
   updateCartItem,
 } from "../../redux/thunks/CartItemThunks";
+import { shallowEqualObjects } from "shallow-equal";
 import { fetchFoodItemDetails } from "../../redux/thunks/FoodItemThunks";
 import { getUserCartDetails } from "../../redux/thunks/UserThunks";
+import { API_STATE } from "../../utils/constants/common";
 import secureDomain from "../hoc/SecureDomain";
 import "./AddToCart.scss";
 
@@ -38,13 +40,14 @@ interface Props {
   foodItemDetailsError: null | AxiosError;
   foodItemDetailsLoadingState: string;
   indexedFoodItems: any;
-  fromCartDetails: boolean;
   getUserCartDetails(): void;
+  foodItemDetails: FoodItemInterface;
 }
 
 const mapStateToProps = (state: { foodItemReducer: FoodItemStoreState }) => {
   const { foodItemDetails, indexedFoodItems } = state.foodItemReducer;
   return {
+    foodItemDetails: foodItemDetails.data.foodItemDetails,
     foodItemDetailsError: foodItemDetails.error,
     foodItemDetailsLoadingState: foodItemDetails.state,
     indexedFoodItems,
@@ -76,7 +79,7 @@ const mapDispatchToProps = (
     },
     fetchFoodItemDetails: (_id: string) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(fetchFoodItemDetails({ _id }));
+      thunkDispatch(fetchFoodItemDetails({ _id }, true));
     },
     getUserCartDetails: () => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
@@ -94,6 +97,8 @@ const AddToCart: React.FC<Props> = ({
   fetchFoodItemDetails,
   indexedFoodItems,
   getUserCartDetails,
+  foodItemDetailsLoadingState,
+  foodItemDetails,
 }) => {
   const { cartItem } = isEmpty(indexedFoodItems)
     ? foodItem || {}
@@ -112,10 +117,18 @@ const AddToCart: React.FC<Props> = ({
     }
   };
 
-  const updateAndDisplayCartItem = async (quantity: number) => {
+  const updateAndDisplayCartItem = async (
+    currentQuantity: number,
+    increamentBy: number
+  ) => {
+    const quantity = currentQuantity + increamentBy;
     const response =
       quantity > 0
-        ? await updateCartItem({ ...cartItem, quantity })
+        ? await updateCartItem({
+            ...cartItem,
+            quantity,
+            incQuantity: increamentBy > 0,
+          })
         : await deleteCartItem(cartItem);
     if (response?.status === 204 || response?.status === 200) {
       fetchFoodItemDetails(foodItem._id);
@@ -123,9 +136,17 @@ const AddToCart: React.FC<Props> = ({
     }
   };
 
+  const isLoading = (): boolean => {
+    return (
+      foodItem._id === foodItemDetails?._id &&
+      foodItemDetailsLoadingState === `${foodItem._id}/${API_STATE.LOADING}`
+    );
+  };
+
   return (
     <div className="add-to-cart">
-      {!cartItem && (
+      {isLoading() && <Spinner animation="border" />}
+      {!isLoading() && !cartItem && (
         <Button
           className="add-btn"
           variant="secondary"
@@ -134,13 +155,13 @@ const AddToCart: React.FC<Props> = ({
           Add
         </Button>
       )}
-      {cartItem && (
+      {!isLoading() && cartItem && (
         <Row className="update-cart">
           <Col className="p-0">
             <Button
               variant="default"
               className="d-flex"
-              onClick={() => updateAndDisplayCartItem(cartItem.quantity - 1)}
+              onClick={() => updateAndDisplayCartItem(cartItem.quantity, -1)}
             >
               <FontAwesomeIcon icon={faMinus} />
             </Button>
@@ -152,7 +173,7 @@ const AddToCart: React.FC<Props> = ({
             <Button
               variant="default"
               className="d-flex"
-              onClick={() => updateAndDisplayCartItem(cartItem.quantity + 1)}
+              onClick={() => updateAndDisplayCartItem(cartItem.quantity, +1)}
             >
               <FontAwesomeIcon icon={faPlus} />
             </Button>

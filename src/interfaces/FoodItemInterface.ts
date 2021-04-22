@@ -33,6 +33,7 @@ export interface FoodItemListReqPayLoad {
 
 export interface FoodItemDetailsPayload {
   _id: string;
+  insertMetaInfo?: boolean;
 }
 
 export interface FoodItemDetailsResp {

@@ -9,6 +9,10 @@ export const foodItemSchema: JSONSchema7 = {
       type: "string",
       title: "Name",
     },
+    price: {
+      type: "number",
+      title: "Price",
+    },
     type: {
       type: "boolean",
       title: "Type",

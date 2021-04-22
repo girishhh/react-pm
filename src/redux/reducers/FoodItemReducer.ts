@@ -63,7 +63,12 @@ const foodItemReducer = (
       return { ...state, foodItemList };
 
     case "food-items/details/loading":
-      foodItemDetails.state = API_STATE.LOADING;
+      if (payload.insertMetaInfo) {
+        (foodItemDetails.state as string) = `${payload._id}/${API_STATE.LOADING}`;
+      } else {
+        foodItemDetails.state = API_STATE.LOADING;
+      }
+
       return { ...state, foodItemDetails };
     case "food-items/details/error":
       foodItemDetails.state = API_STATE.ERROR;

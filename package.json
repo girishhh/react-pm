@@ -35,6 +35,7 @@
     "react-table": "^7.6.3",
     "react-virtualized": "^9.22.3",
     "redux-thunk": "^2.3.0",
+    "shallow-equal": "^1.2.1",
     "typescript": "^4.0.5",
     "web-vitals": "^0.2.4"
   },

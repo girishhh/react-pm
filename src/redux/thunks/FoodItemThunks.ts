@@ -30,12 +30,25 @@ export function fetchFoodItemList(payload: FoodItemListReqPayLoad) {
   };
 }
 
-export function fetchFoodItemDetails(payload: FoodItemDetailsPayload) {
+export function fetchFoodItemDetails(
+  payload: FoodItemDetailsPayload,
+  insertMetaInfo = false
+) {
   return async function fetchFoodItemDetailsThunk(
     dispatch: Dispatch<FoodItemAction>
   ) {
     try {
-      dispatch({ type: "food-items/details/loading" });
+      if (insertMetaInfo) {
+        dispatch({
+          type: "food-items/details/loading",
+          payload: { ...payload, insertMetaInfo },
+        });
+      } else {
+        dispatch({
+          type: "food-items/details/loading",
+          payload: { ...payload, insertMetaInfo },
+        });
+      }
       const data = await FoodItemService.fetchFoodItemDetails(payload._id);
       dispatch({
         type: "food-items/details/data",

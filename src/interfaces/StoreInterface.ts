@@ -5,3 +5,9 @@ export interface DefaultResponse {
   state: string;
   error: null | AxiosError;
 }
+
+export interface DefaultResponseWithState {
+  data: any;
+  state: { id: string; value: string };
+  error: null | AxiosError;
+}
