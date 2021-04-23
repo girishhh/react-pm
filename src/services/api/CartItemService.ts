@@ -47,7 +47,7 @@ class CartItemService {
   }
 
   static async refreshCart(
-    cartItem: CartItemInterface
+    cartItem: CreateCartItemRequestInterface
   ): Promise<AxiosResponse> {
     const requestConfig = new APIParamsBuilderHelper(
       CartItemConstants.CART_ITEM_REFRESH_CART_API,
@@ -56,7 +56,7 @@ class CartItemService {
       .addRequestBody(cartItem)
       .build().getConfig;
 
-    const result = await APIHelper.sendRequest<CartItemInterface>(
+    const result = await APIHelper.sendRequest<CreateCartItemRequestInterface>(
       requestConfig
     ).catch((err: string) => {
       throw err;

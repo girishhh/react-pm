@@ -17,6 +17,7 @@ export function createCartItem(cartItem: CreateCartItemRequestInterface) {
       return response;
     } catch (error) {
       dispatch({ type: "cart-items/create/error", payload: error });
+      return error;
     }
   };
 }
@@ -36,15 +37,15 @@ export function updateCartItem(cartItem: CartItemInterface) {
   };
 }
 
-export function refreshCart(payload: CartItemInterface) {
+export function refreshCart(payload: CreateCartItemRequestInterface) {
   return async function createCartItemThunk(
     dispatch: Dispatch<CartItemAction>
   ) {
     try {
       dispatch({ type: "cart-items/refreshCart/loading" });
-      const data = await CartItemService.createCartItem(payload);
+      const response = await CartItemService.refreshCart(payload);
       dispatch({ type: "cart-items/refreshCart/data" });
-      // if (data.status === 201) history.go(0);
+      return response;
     } catch (error) {
       dispatch({ type: "cart-items/refreshCart/error", payload: error });
     }
@@ -60,7 +61,6 @@ export function deleteCartItem(_id: string) {
       const response = await CartItemService.deleteCartItem(_id);
       dispatch({ type: "cart-items/delete/data" });
       return response;
-      // if (data.status === 204) history.go(0);
     } catch (error) {
       dispatch({ type: "cart-items/delete/error", payload: error });
     }

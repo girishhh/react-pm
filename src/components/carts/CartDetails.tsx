@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { CartInterface } from "../../interfaces/CartInterface";
 import { FoodItemInterface } from "../../interfaces/FoodItemInterface";
+import { RestaurentInterface } from "../../interfaces/RestaurentInterface";
 import { UserAction, UserStoreState } from "../../interfaces/UserInterface";
 import { getUserCartDetails } from "../../redux/thunks/UserThunks";
 import { API_STATE } from "../../utils/constants/common";
@@ -72,7 +73,13 @@ const CartDetails: React.FC<Props> = ({
       {userCartDetails?.cartItems && (
         <Row className="mx-0 w-100">
           <Col className="d-flex">
-            <h3>Cart: {userCartDetails.cartItems.length}</h3>
+            <div className="d-block">
+              <h3>Cart: {userCartDetails.cartItems.length}</h3>
+              <h6>
+                From Restaurent{" "}
+                {(userCartDetails.restaurent as RestaurentInterface).name}
+              </h6>
+            </div>
           </Col>
         </Row>
       )}

@@ -2,15 +2,17 @@ import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";
 import { isEmpty } from "lodash";
-import React, { Dispatch, memo } from "react";
+import React, { Dispatch, memo, useState } from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import {
   CartItemAction,
   CartItemInterface,
+  CartItemStoreState,
   CreateCartItemRequestInterface,
 } from "../../interfaces/CartItemInterface";
+import { APIResponse } from "../../interfaces/CommonInterface";
 import {
   FoodItemInterface,
   FoodItemStoreState,
@@ -21,10 +23,12 @@ import {
   refreshCart,
   updateCartItem,
 } from "../../redux/thunks/CartItemThunks";
-import { shallowEqualObjects } from "shallow-equal";
 import { fetchFoodItemDetails } from "../../redux/thunks/FoodItemThunks";
 import { getUserCartDetails } from "../../redux/thunks/UserThunks";
+import { CART_ALREADY_EXISTS_ERROR } from "../../utils/constants/CartItemConstants";
 import { API_STATE } from "../../utils/constants/common";
+import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
+import CommonModal from "../common/CommonModal";
 import secureDomain from "../hoc/SecureDomain";
 import "./AddToCart.scss";
 
@@ -32,25 +36,33 @@ interface Props {
   foodItem: FoodItemInterface;
   createCartItem(
     cartItem: CreateCartItemRequestInterface
-  ): Promise<{ status: number }>;
-  updateCartItem(cartItem: CartItemInterface): Promise<{ status: number }>;
-  deleteCartItem(cartItem: CartItemInterface): Promise<{ status: number }>;
-  refreshCart(cartItem: CartItemInterface): void;
+  ): Promise<APIResponse>;
+  updateCartItem(cartItem: CartItemInterface): Promise<APIResponse>;
+  deleteCartItem(cartItem: CartItemInterface): Promise<APIResponse>;
+  refreshCart(cartItem: CreateCartItemRequestInterface): Promise<APIResponse>;
   fetchFoodItemDetails(_id: string): void;
   foodItemDetailsError: null | AxiosError;
   foodItemDetailsLoadingState: string;
   indexedFoodItems: any;
   getUserCartDetails(): void;
   foodItemDetails: FoodItemInterface;
+  cartRefreshLoadingState: string;
+  cartRefreshError: null | AxiosError;
 }
 
-const mapStateToProps = (state: { foodItemReducer: FoodItemStoreState }) => {
+const mapStateToProps = (state: {
+  foodItemReducer: FoodItemStoreState;
+  cartItemReducer: CartItemStoreState;
+}) => {
   const { foodItemDetails, indexedFoodItems } = state.foodItemReducer;
+  const { cartRefresh } = state.cartItemReducer;
   return {
     foodItemDetails: foodItemDetails.data.foodItemDetails,
     foodItemDetailsError: foodItemDetails.error,
     foodItemDetailsLoadingState: foodItemDetails.state,
     indexedFoodItems,
+    cartRefreshLoadingState: cartRefresh.state,
+    cartRefreshError: cartRefresh.error,
   };
 };
 
@@ -61,21 +73,22 @@ const mapDispatchToProps = (
     createCartItem: async (cartItem: CreateCartItemRequestInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
       const response = await thunkDispatch(createCartItem(cartItem));
-      return (response as unknown) as { status: number };
+      return (response as unknown) as APIResponse;
     },
     updateCartItem: async (cartItem: CartItemInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
       const response = await thunkDispatch(updateCartItem(cartItem));
-      return (response as unknown) as { status: number };
+      return (response as unknown) as APIResponse;
     },
     deleteCartItem: async (cartItem: CartItemInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
       const response = await thunkDispatch(deleteCartItem(cartItem._id));
-      return (response as unknown) as { status: number };
+      return (response as unknown) as APIResponse;
     },
-    refreshCart: (cartItem: CartItemInterface) => {
+    refreshCart: async (cartItem: CreateCartItemRequestInterface) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
-      thunkDispatch(refreshCart(cartItem));
+      const response = await thunkDispatch(refreshCart(cartItem));
+      return (response as unknown) as APIResponse;
     },
     fetchFoodItemDetails: (_id: string) => {
       const thunkDispatch = dispatch as ThunkDispatch<{}, {}, any>;
@@ -99,10 +112,16 @@ const AddToCart: React.FC<Props> = ({
   getUserCartDetails,
   foodItemDetailsLoadingState,
   foodItemDetails,
+  cartRefreshLoadingState,
+  cartRefreshError,
 }) => {
   const { cartItem } = isEmpty(indexedFoodItems)
     ? foodItem || {}
     : indexedFoodItems[foodItem._id] || foodItem || {};
+
+  const [showCartResetDialog, setShowCartResetDialog] = useState<boolean>(
+    false
+  );
 
   const createAndDisplayUpdatedCartItem = async () => {
     const response = await createCartItem({
@@ -111,9 +130,14 @@ const AddToCart: React.FC<Props> = ({
       foodItem: foodItem._id,
       restaurent: foodItem.restaurent._id,
     });
+
     if (response?.status === 201) {
       fetchFoodItemDetails(foodItem._id);
       getUserCartDetails();
+    } else if (
+      response?.response?.data?.message === CART_ALREADY_EXISTS_ERROR
+    ) {
+      setShowCartResetDialog(true);
     }
   };
 
@@ -143,8 +167,35 @@ const AddToCart: React.FC<Props> = ({
     );
   };
 
+  const onConfirm = async () => {
+    const response = await refreshCart({
+      price: foodItem.price,
+      quantity: 1,
+      foodItem: foodItem._id,
+      restaurent: foodItem.restaurent._id,
+    });
+    if (response?.status === 201) {
+      fetchFoodItemDetails(foodItem._id);
+      getUserCartDetails();
+      setShowCartResetDialog(false);
+    }
+  };
+  const hideDialog = () => setShowCartResetDialog(false);
+
   return (
     <div className="add-to-cart">
+      {!isLoading() && (
+        <CommonModal
+          title="Alert"
+          body="Cart Items already exists for other restaurents, Would you like to reset your cart items?"
+          confirmText="Yes"
+          onConfirm={onConfirm}
+          show={showCartResetDialog}
+          hideDialog={hideDialog}
+          loading={cartRefreshLoadingState === API_STATE.LOADING}
+          errors={formatResponseErrors(cartRefreshError)}
+        />
+      )}
       {isLoading() && <Spinner animation="border" />}
       {!isLoading() && !cartItem && (
         <Button

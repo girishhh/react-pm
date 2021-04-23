@@ -25,4 +25,12 @@ interface KeyValue {
   [key: string]: any;
 }
 
-export type { LocationProps, ActionType, Session, KeyValue };
+interface APIResponse {
+  status: number;
+  response: {
+    data?: any;
+    message?: string;
+  };
+}
+
+export type { LocationProps, ActionType, Session, KeyValue, APIResponse };
