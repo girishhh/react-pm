@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { PaymentCharges } from "./PaymentCharges";
 import { DefaultResponse } from "./StoreInterface";
 
 export interface CompanyStoreState {
@@ -15,6 +16,7 @@ export interface CompanyInterface {
   city: string;
   subdomain: string;
   timeZone: string;
+  paymentCharges: PaymentCharges;
 }
 
 export interface CompanyListReqPayLoad {

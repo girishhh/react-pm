@@ -3,7 +3,7 @@ import { JSONSchema7 } from "json-schema";
 export const companySchema: JSONSchema7 = {
   title: "Company Details",
   type: "object",
-  required: ["city", "subdomain", "timeZone"],
+  required: ["city", "subdomain", "timeZone", "paymentCharges"],
   properties: {
     name: {
       type: "string",
@@ -20,6 +20,11 @@ export const companySchema: JSONSchema7 = {
     timeZone: {
       type: "string",
       title: "Timezone",
+    },
+    paymentCharges: {
+      type: "object",
+      required: ["gst"],
+      properties: { gst: { type: "number", title: "GST" } },
     },
   },
 };

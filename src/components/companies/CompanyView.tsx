@@ -138,6 +138,11 @@ class CompanyView extends React.Component<Props> {
 
                     <Row className="w-100 pt-3">TimeZone</Row>
                     <Row className="w-100">{companyDetails.timeZone}</Row>
+
+                    <Row className="w-100 pt-3">GST</Row>
+                    <Row className="w-100">
+                      {companyDetails.paymentCharges?.gst}
+                    </Row>
                   </Row>
                 )}
             </>
