@@ -11,6 +11,8 @@ import { foodItemReducer } from "./reducers/FoodItemReducer";
 import { menuItemReducer } from "./reducers/MenuItemReducer";
 import { menuReducer } from "./reducers/MenuReducer";
 import { cartItemReducer } from "./reducers/CartItemReducer";
+import { addressReducer } from "./reducers/AddressReducer";
+import { orderReducer } from "./reducers/OrderReducer";
 
 const rootReducer = combineReducers({
   loginReducer,
@@ -24,6 +26,8 @@ const rootReducer = combineReducers({
   menuItemReducer,
   menuReducer,
   cartItemReducer,
+  addressReducer,
+  orderReducer,
 });
 
 export default createStore(rootReducer, applyMiddleware(thunk));

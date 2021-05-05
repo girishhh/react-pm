@@ -7,6 +7,7 @@ import Login from "./components/auth/Login";
 import ReSendConfirmation from "./components/auth/ReSendConfirmation";
 import SignOut from "./components/auth/SignOut";
 import SignUp from "./components/auth/SignUp";
+import CheckoutDetails from "./components/checkout/CheckoutDetails";
 import NotFound from "./components/common/NotFound";
 import CompanyCreate from "./components/companies/CompanyCreate";
 import CompanyList from "./components/companies/CompanyList";
@@ -23,6 +24,7 @@ import MenuItemCreate from "./components/menu-items/MenuItemCreate";
 import MenuItemList from "./components/menu-items/MenuItemList";
 import MenuCreate from "./components/menus/MenuCreate";
 import MenuList from "./components/menus/MenuList";
+import MakePayment from "./components/payment/MakePayment";
 import RestaurentCreate from "./components/restaurents/RestaurentCreate";
 import RestaurentList from "./components/restaurents/RestaurentList";
 import RestaurentView from "./components/restaurents/RestaurentView";
@@ -159,6 +161,9 @@ class AppComponent extends React.Component {
             path="/restaurents/:restaurentId/menus/:menuId/edit"
             component={MenuCreate}
           />
+
+          <ProtectedRoute exact path="/checkout" component={CheckoutDetails} />
+          <ProtectedRoute exact path="/payment" component={MakePayment} />
 
           <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
           <Route path="*" component={NotFound} />

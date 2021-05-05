@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import React, { Dispatch } from "react";
+import * as H from "history";
 import { Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
@@ -27,6 +28,7 @@ interface Props extends LocationProps {
   restaurentDetailsError: null | AxiosError;
   restaurentDetailsLoadingState: string;
   fetchRestaurentDetails(_id: string): void;
+  history: H.History;
 }
 
 const mapStateToProps = (state: {
@@ -66,6 +68,7 @@ class RestaurentView extends React.Component<Props> {
       restaurentDetailsLoadingState,
       restaurentDetails,
       restaurentDetailsError,
+      history,
     } = this.props;
     const currentUser = getUser();
     const canViewRestaurent = currentUser?.permissions.includes(
@@ -95,7 +98,10 @@ class RestaurentView extends React.Component<Props> {
                 />
               )}
               {hasRole(currentUser?.roles, ROLES.CUSTOMER) && (
-                <CustomerRestaurentView restaurentDetails={restaurentDetails} />
+                <CustomerRestaurentView
+                  restaurentDetails={restaurentDetails}
+                  history={history}
+                />
               )}
             </>
           )}

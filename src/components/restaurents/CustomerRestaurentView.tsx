@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import * as H from "history";
 import React, { CSSProperties, Dispatch, useState } from "react";
 import { Card, Col, Nav, NavItem, NavLink, Row } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -29,6 +30,7 @@ interface CustomerRestaurentViewProps {
     conditions: string
   ): Promise<FoodItemInterface[]>;
   foodItemListTotal: number;
+  history: H.History;
 }
 
 const mapStateToProps = (state: { foodItemReducer: FoodItemStoreState }) => {
@@ -66,6 +68,7 @@ const CustomerRestaurentView: React.FC<CustomerRestaurentViewProps> = ({
   foodItemListError,
   foodItemListState,
   fetchFoodItemList,
+  history,
 }) => {
   const categories = getCategories(restaurentDetails);
   const [category, setCategory] = useState<string | undefined>();
@@ -147,7 +150,7 @@ const CustomerRestaurentView: React.FC<CustomerRestaurentViewProps> = ({
           />
         </Col>
         <Col md="3">
-          <CartDetails />
+          <CartDetails history={history} source="restaurent" />
         </Col>
       </Row>
     </>

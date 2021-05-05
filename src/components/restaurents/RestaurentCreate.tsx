@@ -1,4 +1,4 @@
-import Form, { AjvError, ISubmitEvent } from "@rjsf/core";
+import Form, { ISubmitEvent } from "@rjsf/core";
 import { AxiosError } from "axios";
 import * as H from "history";
 import { default as loadash, default as lodash } from "lodash";
@@ -17,14 +17,12 @@ import {
   fetchRestaurentDetails,
   updateRestaurent,
 } from "../../redux/thunks/RestaurentThunks";
-import { API_STATE } from "../../utils/constants/common";
-import { ViewActionTypes } from "../../utils/constants/common";
+import { API_STATE, ViewActionTypes } from "../../utils/constants/common";
 import { EDIT_PATH } from "../../utils/constants/RestaurentConstants";
 import { getUser } from "../../utils/helpers/AuthHelper";
 import { formatResponseErrors } from "../../utils/helpers/CommonHelper";
 import ApiError from "../common/ApiErrors";
 import secureDomain from "../hoc/SecureDomain";
-import LatTextInput from "./LatTextInput";
 import RenderGooglePlaces from "./RenderGooglePlaces";
 import { restaurentSchema, restaurentUISchema } from "./RestaurentSchema";
 

@@ -1,7 +1,8 @@
 import { AxiosError } from "axios";
 import { isEmpty } from "lodash";
+import * as H from "history";
 import React, { Dispatch, useEffect } from "react";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { CartInterface } from "../../interfaces/CartInterface";
@@ -19,6 +20,8 @@ interface Props {
   userCartDetailsError: null | AxiosError;
   userCartDetailsState: string;
   userCartDetails: CartInterface;
+  history: H.History;
+  source: string;
 }
 
 const mapStateToProps = (state: { userReducer: UserStoreState }) => {
@@ -46,6 +49,8 @@ const CartDetails: React.FC<Props> = ({
   userCartDetails,
   userCartDetailsError,
   userCartDetailsState,
+  history,
+  source,
 }) => {
   useEffect(() => {
     getUserCartDetails();
@@ -106,6 +111,25 @@ const CartDetails: React.FC<Props> = ({
             <h4>
               SubTotal: <span className="pl-2">{userCartDetails.subTotal}</span>
             </h4>
+          </Col>
+        </Row>
+      )}
+      {userCartDetails && (
+        <Row className="pt-4 mx-0 w-100">
+          <Col>
+            <Button
+              variant="success"
+              onClick={() => {
+                source === "checkout"
+                  ? history.push({
+                      pathname: "/payment",
+                      state: { cartId: userCartDetails._id },
+                    })
+                  : history.push("/checkout");
+              }}
+            >
+              {source === "checkout" ? "Pay and Order" : "Checkout"}
+            </Button>
           </Col>
         </Row>
       )}
