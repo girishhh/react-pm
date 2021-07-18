@@ -8,7 +8,7 @@ const RenderGooglePlaces: React.FC<FieldProps> = (
   return (
     <GooglePlacesAutoComplete
       isMarkerShown
-      googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC0P3If-HPI1CyqDwrjqqQMJypGLRjfwlY&libraries=geometry,drawing,places"
+      googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&key=${process.env.GOOGLE_PLACES_SECRET_KEY}&libraries=geometry,drawing,places`}
       loadingElement={<div style={{ height: `100%` }} />}
       containerElement={<div />}
       mapElement={<div style={{ height: `70%`, display: "none" }} />}
