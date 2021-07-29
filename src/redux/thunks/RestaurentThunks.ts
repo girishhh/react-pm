@@ -4,7 +4,7 @@ import {
   RestaurentAction,
   RestaurentDetailsPayload,
   RestaurentInterface,
-  RestaurentListReqPayLoad,
+  RestaurentListReqPayLoad
 } from "../../interfaces/RestaurentInterface";
 import RestaurentService from "../../services/api/RestaurentService";
 
