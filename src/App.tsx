@@ -1,5 +1,5 @@
 // import * as H from "history";
-import React from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import "./App.scss";
 import ActivateAccount from "./components/auth/ActivateAccount";
@@ -26,9 +26,9 @@ import MenuCreate from "./components/menus/MenuCreate";
 import MenuList from "./components/menus/MenuList";
 import MakePayment from "./components/payment/MakePayment";
 import RestaurentCreate from "./components/restaurents/RestaurentCreate";
-import RestaurentList from "./components/restaurents/RestaurentList";
 import RestaurentView from "./components/restaurents/RestaurentView";
 import UserCreate from "./components/users/UserCreate";
+const RestaurentList = React.lazy(()=>import("./components/restaurents/RestaurentList"));
 
 class AppComponent extends React.Component {
   render() {
@@ -36,6 +36,7 @@ class AppComponent extends React.Component {
       <BrowserRouter>
         <Switch>
           {/* <ProtectedRoute exact path="/admins" component={AdminDashboard} /> */}
+          <Suspense fallback={<div>Loading...</div>}>
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/signOut" component={SignOut} />
           <AuthRoute exact path="/signUp" component={SignUp} />
@@ -167,6 +168,7 @@ class AppComponent extends React.Component {
 
           <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
           <Route path="*" component={NotFound} />
+          </Suspense>
         </Switch>
       </BrowserRouter>
     );

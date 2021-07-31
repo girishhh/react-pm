@@ -86,7 +86,7 @@ addRequestInterceptors(
           AuthConstants.USER_TOKEN
         )}`,
         subdomain: `${
-          (parseDomain(window.location.host) as any).subDomains[0]
+          (parseDomain(window.location.hostname) as any).subDomains[0]
         }`,
       },
       params: {

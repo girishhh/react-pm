@@ -8,7 +8,7 @@ function secureDomain<P>(
 ): ComponentClass<P> {
   return class SecureDomain extends React.Component {
     render() {
-      const parsedResult = parseDomain(window.location.host) as any;
+      const parsedResult = parseDomain(window.location.hostname) as any;
       if (ALLOWED_SUB_DOMAINS.includes(parsedResult.subDomains[0])) {
         return <WrappedComponent {...(this.props as P)} />;
       } else {

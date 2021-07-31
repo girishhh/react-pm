@@ -33,7 +33,7 @@ export const formatResponseErrors = (error: AxiosError | any): string[] => {
 };
 
 export const isAdminDomain = (): boolean => {
-  const parsedResult = parseDomain(window.location.host) as any;
+  const parsedResult = parseDomain(window.location.hostname) as any;
   if (parsedResult.subDomains[0] === ROLES.ADMIN) return true;
   return false;
 };
