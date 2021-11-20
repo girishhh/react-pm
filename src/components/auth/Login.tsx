@@ -77,14 +77,19 @@ class Login extends React.Component<LoginProps> {
     return null;
   }
 
+  uploadFile = (e: any) => {
+    console.log("SSSS", e.target.result);
+  }
+
   render() {
-    const { loadingState, error } = this.props;
+    const { loadingState, error } = this.props;    
 
     return (
       <>
         <Row className="h-100 login">
           <Col className="d-flex justify-content-center align-items-center">
             <div className="d-block">
+              {/* <input type="file" onChange={this.uploadFile} /> */}
               {loadingState === API_STATE.LOADING && (
                 <Spinner animation="border" />
               )}

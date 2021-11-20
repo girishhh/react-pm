@@ -14,6 +14,7 @@ import { menuReducer } from "./reducers/MenuReducer";
 import { orderReducer } from "./reducers/OrderReducer";
 import { restaurentReducer } from "./reducers/RestaurentReducer";
 import { userReducer } from "./reducers/UserReducer";
+import logger from "redux-logger";
 
 
 const rootReducer = combineReducers({
@@ -36,4 +37,4 @@ const rootReducer = combineReducers({
 const composeEnhancers = composeWithDevTools({trace: true});
 
 
-export default createStore(rootReducer, {}, composeEnhancers(applyMiddleware(thunk)));
+export default createStore(rootReducer, {}, composeEnhancers(applyMiddleware(thunk,logger)));

@@ -34,9 +34,9 @@ class AppComponent extends React.Component {
   render() {
     return (
       <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>}>
         <Switch>
-          {/* <ProtectedRoute exact path="/admins" component={AdminDashboard} /> */}
-          <Suspense fallback={<div>Loading...</div>}>
+          {/* <ProtectedRoute exact path="/admins" component={AdminDashboard} /> */}          
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/signOut" component={SignOut} />
           <AuthRoute exact path="/signUp" component={SignUp} />
@@ -168,8 +168,8 @@ class AppComponent extends React.Component {
 
           <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
           <Route path="*" component={NotFound} />
-          </Suspense>
         </Switch>
+        </Suspense>
       </BrowserRouter>
     );
   }

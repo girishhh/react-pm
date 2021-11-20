@@ -1,0 +1,20 @@
+.infinite-scroller {
+  .row-item {
+    display: flex;
+    padding: 20px;
+  }
+  #cell-width {
+    flex-grow: 1;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .infinite-scroller {
+    .row-item {
+      display: unset;
+    }
+    #cell-width {
+      min-width: 100%;
+    }
+  }
+}

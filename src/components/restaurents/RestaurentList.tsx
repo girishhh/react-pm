@@ -4,17 +4,18 @@ import React, {
   Dispatch,
   useEffect,
   useMemo,
-  useState,
+  useState
 } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { CellValue } from "react-table";
+import { InfiniteLoader } from "react-virtualized";
 import { ThunkDispatch } from "redux-thunk";
 import { LocationProps } from "../../interfaces/CommonInterface";
 import {
   RestaurentAction,
   RestaurentInterface,
-  RestaurentStoreState,
+  RestaurentStoreState
 } from "../../interfaces/RestaurentInterface";
 import { fetchRestaurentList } from "../../redux/thunks/RestaurentThunks";
 import { API_STATE, TABLE_CONSTANTS } from "../../utils/constants/common";
@@ -23,7 +24,7 @@ import { getUser } from "../../utils/helpers/AuthHelper";
 import { hasRole } from "../../utils/helpers/CommonHelper";
 import ApiError from "../common/ApiErrors";
 import { CommonTable } from "../common/CommonTable";
-import GridInfiniteLoader from "../common/GridInfiniteLoader";
+import InfiniteScroller from "../common/InfiniteScroller";
 import secureDomain from "../hoc/SecureDomain";
 import "./RestaurentList.scss";
 import RestaurentListHeader from "./RestaurentListHeader";
@@ -66,7 +67,7 @@ const mapDispatchToProps = (
       const restaurentList = await thunkDispatch(
         fetchRestaurentList({ start, limit, conditions })
       );
-      return (restaurentList as unknown) as RestaurentInterface[];
+      return restaurentList as unknown as RestaurentInterface[];
     },
   };
 };
@@ -79,16 +80,7 @@ const RestaurentList: React.FC<RestaurentProps> = ({
   restaurentListTotal,
   history,
 }) => {
-  const [pageCount, setPageCount] = React.useState(0);
-  const [columnCount, setColumnCount] = useState(3);
-
-  const onResize = (width: number): void => {
-    if (width < 768) {
-      setColumnCount(1);
-    } else {
-      setColumnCount(3);
-    }
-  };
+  const [pageCount, setPageCount] = React.useState(0);  
 
   const columns = useMemo(
     () => [
@@ -152,29 +144,19 @@ const RestaurentList: React.FC<RestaurentProps> = ({
     return isOwner ? JSON.stringify({ _id: { in: user?.restaurents } }) : "";
   };
 
-  const cellData = (
-    list: RestaurentInterface[],
-    row: number,
-    col: number,
-    colCount: number,
-    style: CSSProperties,
-    totalRecords: number
-  ) => {
-    const cellIndex = row * colCount + col;
-    if (list && cellIndex > totalRecords - 1) return <></>;
-    const restaurentData = list && list[row * colCount + col];
+  const renderCell = (item: any) => {
     return (
-      <div id="restaurent-cell" style={{ ...style, padding: "40px" }}>
+      <div id="restaurent-cell" style={{padding: "40px" }}>
         <Card
           style={{ minHeight: "100px" }}
           onClick={() =>
-            history.push(`/restaurents/${restaurentData._id}/view`)
+            history.push(`/restaurents/${item._id}/view`)
           }
         >
           <Card.Body>
-            <Card.Title>{restaurentData && restaurentData.name}</Card.Title>
+            <Card.Title>{item?.name}</Card.Title>
             <Card.Text>
-              <span>{restaurentData && restaurentData.name}</span>
+              <span>{ item?.name}</span>
             </Card.Text>
           </Card.Body>
         </Card>
@@ -203,17 +185,14 @@ const RestaurentList: React.FC<RestaurentProps> = ({
               changePageCount={changePageCount}
             />
           )}
-
-          {hasRole(user?.roles, ROLES.CUSTOMER) && (
-            <GridInfiniteLoader
-              listData={restaurentList}
-              isLoading={restaurentListState === API_STATE.LOADING}
-              columnCount={columnCount}
-              cellData={cellData}
-              fetchList={fetchRestaurentList}
-              totalRecords={restaurentListTotal}
-              onResize={onResize}
-              fetchConditon=""
+          
+          {hasRole(user?.roles, ROLES.CUSTOMER) && (            
+            <InfiniteScroller
+              totalItems={restaurentListTotal}
+              fetchData={fetchRestaurentList}
+              renderCell={renderCell}
+              noOfItemsInRow={2}
+              fetchCondition={getFetchCondition()}
             />
           )}
         </Col>

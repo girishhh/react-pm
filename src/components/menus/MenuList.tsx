@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import classnames from "classnames";
 import * as H from "history";
+import { isEmpty } from "lodash";
 import React, { CSSProperties, Dispatch, useEffect, useState } from "react";
 import { Button, Card, Col, Row, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -102,6 +103,7 @@ const MenuList: React.FC<MenuProps> = ({
   const { restaurentId } = match.params as any;
   const conditions = { restaurent: { eq: restaurentId } };
   const [columnCount, setColumnCount] = useState(3);
+  console.log("AAAAAAAAA",menuList)
 
   const cellData = (
     list: MenuInterface[],
@@ -113,7 +115,8 @@ const MenuList: React.FC<MenuProps> = ({
   ) => {
     const cellIndex = row * colCount + col;
     if (list && cellIndex > totalRecords - 1) return <></>;
-    const menuData = list && list[row * colCount + col];
+    const menuData = list && list[row * colCount + col];    
+    // if(isEmpty(menuData)) return <></>;
     return (
       <div style={{ ...style }} className="p-3">
         <Card
@@ -121,7 +124,7 @@ const MenuList: React.FC<MenuProps> = ({
           className={classnames({
             "menu-active":
               menuData?._id ===
-              (restaurentDetails?.activeMenu as MenuInterface)._id,
+              (restaurentDetails?.activeMenu as MenuInterface)?._id,
           })}
         >
           <Card.Header>
