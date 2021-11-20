@@ -191,7 +191,7 @@ const RestaurentList: React.FC<RestaurentProps> = ({
               totalItems={restaurentListTotal}
               fetchData={fetchRestaurentList}
               renderCell={renderCell}
-              noOfItemsInRow={2}
+              noOfItemsInRow={3}
               fetchCondition={getFetchCondition()}
             />
           )}

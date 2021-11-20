@@ -22,15 +22,11 @@ const InfiniteScroller: React.FC<Props> = ({
   const [items, setItems] = useState<any[]>([]);
   const cellWidth = 100/noOfItemsInRow;
 
-  console.log("WINDOWWWWW", window.outerWidth)
+  
   const canLoadMore = (items: any[], totalItems: number): boolean => {
     if (totalItems === undefined) return true;
     return items.length * noOfItemsInRow < totalItems;
   };
-
-  const isMobile = (): boolean => {
-    return window.outerWidth < 768;
-  }
 
   const loadMore = async (page: any) => {
     const pageNumber = page - 1;
